@@ -192,7 +192,7 @@ bot.client.on('qr', (qr) => {
                 minute: '2-digit',
                 second: '2-digit'
             });
-            console.log('📱 QR kod yaradıldı və web səhifədə görünür: http://localhost:3001');
+            console.log(`📱 QR kod yaradıldı və web səhifədə görünür: http://localhost:${config.port}`);
         }
     });
 });
@@ -224,6 +224,13 @@ async function startApplication() {
             console.log(`🌐 HTTP Server işləyir: http://localhost:${config.port}`);
             console.log(`📊 Status: http://localhost:${config.port}/status`);
             console.log(`💚 Health: http://localhost:${config.port}/health`);
+            console.log(`📱 QR Kod səhifəsi: http://localhost:${config.port}/`);
+            
+            // Railway deployment üçün məlumat
+            if (process.env.RAILWAY_ENVIRONMENT) {
+                console.log('🚂 Railway deployment aşkarlandı!');
+                console.log('📱 QR kodu web səhifədə görünəcək');
+            }
         });
         
         // Bot başlat

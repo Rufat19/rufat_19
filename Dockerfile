@@ -45,8 +45,8 @@ ENV TZ=Asia/Baku
 ENV NODE_ENV=production
 ENV BOT_NAME="Rüfət Babayev - Asistent"
 
-# Expose port
-EXPOSE 3001
+# Expose port (Railway-də dinamik təyin edilir)
+EXPOSE $PORT
 
 # Health check - Şəxsi asistent botun sağlığını yoxla
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
