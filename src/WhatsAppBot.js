@@ -10,7 +10,16 @@ class WhatsAppBot {
             }),
             puppeteer: {
                 headless: true,
-                args: ['--no-sandbox', '--disable-setuid-sandbox']
+                executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || null,
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-extensions',
+                    '--disable-gpu',
+                    '--disable-dev-shm-usage',
+                    '--disable-web-security',
+                    '--no-first-run'
+                ]
             }
         });
         
@@ -21,9 +30,11 @@ class WhatsAppBot {
     setupEventListeners() {
         // QR kod generasiyası
         this.client.on('qr', (qr) => {
-            console.log('🔍 QR Kodu skan edin:');
+            console.log('� QR Kod event-i çağırıldı!');
+            console.log('�🔍 QR Kodu skan edin:');
             qrcode.generate(qr, { small: true });
             console.log('\nWhatsApp tətbiqində QR kodu skan edin...');
+            console.log(`🌐 QR kod uzunluğu: ${qr.length} karakter`);
         });
         
         // Bot hazır olduqda
@@ -48,6 +59,16 @@ class WhatsAppBot {
         // Xəta baş verdiyi zaman
         this.client.on('auth_failure', (message) => {
             console.error('❌ Authentication failed:', message);
+        });
+
+        // Loading state
+        this.client.on('loading_screen', (percent, message) => {
+            console.log(`⏳ Yüklənir: ${percent}% - ${message}`);
+        });
+
+        // Error handling
+        this.client.on('change_state', state => {
+            console.log('🔄 Client state dəyişdi:', state);
         });
     }
     
@@ -610,10 +631,13 @@ class WhatsAppBot {
             console.log('🚀 WhatsApp Bot başladılır...');
             console.log(`⚙️  Konfiqurasiya: ${config.botName}`);
             
+            console.log('🔧 WhatsApp Client initialize edilir...');
             await this.client.initialize();
+            console.log('✅ WhatsApp Client başlatıldı!');
             
         } catch (error) {
             console.error('❌ Bot başlatma xətası:', error);
+            throw error;
         }
     }
     
