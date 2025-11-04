@@ -18,8 +18,13 @@ RUN npm ci --only=production
 # Copy source code
 COPY . .
 
-# Create necessary directories
-RUN mkdir -p .wwebjs_auth .wwebjs_cache
+# Create non-root user first
+RUN addgroup -g 1001 -S botuser && adduser -S botuser -u 1001 -G botuser
+
+# Create necessary directories with correct permissions
+RUN mkdir -p .wwebjs_auth .wwebjs_cache && \
+    chown -R botuser:botuser .wwebjs_auth .wwebjs_cache && \
+    chmod -R 755 .wwebjs_auth .wwebjs_cache
 
 # Install Chromium for WhatsApp Web
 RUN apk add --no-cache \
@@ -41,14 +46,13 @@ ENV NODE_ENV=production
 ENV BOT_NAME="Rüfət Babayev - Asistent"
 
 # Expose port
-EXPOSE 3000
+EXPOSE 3001
 
 # Health check - Şəxsi asistent botun sağlığını yoxla
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
-  CMD curl -f http://localhost:3000/health || exit 1
+  CMD curl -f http://localhost:3001/health || exit 1
 
-# Create non-root user for security
-RUN addgroup -g 1001 -S botuser && adduser -S botuser -u 1001 -G botuser
+# Switch to non-root user
 USER botuser
 
 # Start şəxsi asistent bot

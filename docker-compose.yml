@@ -6,7 +6,7 @@ services:
     container_name: rufat-personal-assistant
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3001:3001"
     environment:
       # Şəxsi Asistent Konfiqurasiyası
       - NODE_ENV=production
@@ -35,7 +35,7 @@ services:
       - INTERNAL_IP=4925
       
       # Texniki Konfiqurasiya
-      - PORT=3000
+      - PORT=3001
       - DEBUG=false
       - ENABLE_AUTO_REPLY=true
       - ENABLE_COMMANDS=true
