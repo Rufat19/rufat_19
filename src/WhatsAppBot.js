@@ -71,24 +71,41 @@ class WhatsAppBot {
             // İş statusunu yoxla
             const workStatus = config.getWorkStatus();
             
+            // DEBUG məlumatları (həmişə göstər)
+            console.log('🔍 DEBUG: Mesaj alındı');
+            console.log(`📨 Mesaj: "${message.body}"`);
+            console.log(`👤 Göndərən: ${message.from}`);
+            console.log(`💬 Chat növü: ${chat.isGroup ? 'Qrup' : 'Şəxsi'}`);
+            console.log(`⚙️ Qrup chat aktiv: ${config.enableGroupChat}`);
+            console.log(`🤖 Auto reply aktiv: ${config.enableAutoReply}`);
+            console.log(`⏰ İş statusu: ${workStatus}`);
+            
             if (config.enableLogging) {
                 console.log(`📨 Mesaj alındı: "${message.body}" - ${message.from} (Status: ${workStatus})`);
             }
             
             // Əmr işləmə
             if (isCommand && config.enableCommands) {
+                console.log('🎯 Komanda aşkarlandı, işlənir...');
                 await this.handleCommand(message);
             }
             // Auto reply (ağıllı sistem)
             else if (config.enableAutoReply) {
+                console.log('🤖 Auto reply işləyir...');
                 await this.handleAutoReply(message);
                 
                 // Şəxsi mesajları xüsusi idarə et
                 if (this.isPersonalMessage(messageBody) && workStatus === 'offline') {
+                    console.log('💬 Şəxsi mesaj - dostcasına cavab hazırlanır...');
                     setTimeout(async () => {
                         await this.sendFriendlyResponse(message.from, messageBody);
                     }, 1000); // 1 saniyə gecikmə
                 }
+            } else {
+                console.log('⚠️ Auto reply deaktivdir və ya şərt uyğun deyil');
+                console.log(`- isCommand: ${isCommand}`);
+                console.log(`- enableCommands: ${config.enableCommands}`);
+                console.log(`- enableAutoReply: ${config.enableAutoReply}`);
             }
             
         } catch (error) {
