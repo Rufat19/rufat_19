@@ -1,0 +1,38 @@
+# WhatsApp Bot - Exact Versions (Requirements Lock)
+# Generated automatically - do not edit manually
+# Use: npm install
+
+## Core Dependencies
+whatsapp-web.js@1.23.0
+qrcode-terminal@0.12.0
+express@4.18.2
+dotenv@16.3.1
+fs-extra@11.1.1
+
+## Security & Middleware
+cors@2.8.5
+helmet@7.1.0
+
+## Logging & Utilities
+winston@3.11.0
+moment@2.29.4
+multer@1.4.5
+
+## Development Tools
+nodemon@3.0.1
+eslint@8.55.0
+prettier@3.1.0
+
+## System Requirements
+node>=16.0.0
+npm>=8.0.0
+
+## Installation Commands
+# npm install --save whatsapp-web.js qrcode-terminal express dotenv fs-extra cors helmet winston moment multer
+# npm install --save-dev nodemon eslint prettier
+
+## Environment Setup
+# 1. Create .env file
+# 2. Set WhatsApp business details
+# 3. Configure ports and settings
+# 4. Run: npm start

@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  personal-assistant-bot:
+    build: .
+    container_name: rufat-personal-assistant
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # Şəxsi Asistent Konfiqurasiyası
+      - NODE_ENV=production
+      - BOT_NAME=Rüfət Babayev - Asistent
+      - OWNER_NAME=Rüfət Babayev
+      - OWNER_PHONE=994773632066
+      - PERSONAL_EMAIL=babayev.rufat.official@gmail.com
+      - WORK_EMAIL=rufat.babayev@sosial.gov.az
+      - CITY=Bakı, Azərbaycan
+      
+      # İş Saatları (Bakı vaxtı)
+      - WORK_START=09:00
+      - WORK_END=18:00
+      - TIMEZONE=Asia/Baku
+      - TZ=Asia/Baku
+      
+      # Sosial Media Profiles
+      - TELEGRAM_PROFILE=https://t.me/Rufat19
+      - FACEBOOK_PROFILE=https://www.facebook.com/Rufat.Babayev91
+      - INSTAGRAM_PROFILE=https://www.instagram.com/19rbr19
+      - LINKEDIN_PROFILE=https://www.linkedin.com/in/rufat-babayev19/
+      - GITHUB_PROFILE=https://github.com/Rufat19
+      
+      # İş İnteqrasiyası
+      - TELEGRAM_BOT=@Sosial_Zone_Robot
+      - INTERNAL_IP=4925
+      
+      # Texniki Konfiqurasiya
+      - PORT=3000
+      - DEBUG=false
+      - ENABLE_AUTO_REPLY=true
+      - ENABLE_COMMANDS=true
+      - ENABLE_GROUP_CHAT=false
+    volumes:
+      - ./logs:/app/logs
+      - ./.wwebjs_auth:/app/.wwebjs_auth
+      - ./.wwebjs_cache:/app/.wwebjs_cache
+      - /etc/localtime:/etc/localtime:ro  # Sistem vaxtı sinxronizasiyası
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s  # Şəxsi asistent üçün daha uzun başlama vaxtı
+    labels:
+      - "com.rufat.assistant.description=Rüfət Babayev Şəxsi Asistent Bot"
+      - "com.rufat.assistant.version=2.0"
+      - "com.rufat.assistant.timezone=Asia/Baku"
+
+  # Optional: Redis for session və chat storage
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: assistant-redis
+  #   restart: unless-stopped
+  #   volumes:
+  #     - redis_data:/data
+
+  # Optional: MongoDB for order storage
+  # mongodb:
+  #   image: mongo:6
+  #   container_name: whatsapp-mongodb
+  #   restart: unless-stopped
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: admin
+  #     MONGO_INITDB_ROOT_PASSWORD: password
+  #   volumes:
+  #     - mongodb_data:/data/db
+
+# volumes:
+#   redis_data:
+#   mongodb_data:
