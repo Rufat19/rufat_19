@@ -17,12 +17,12 @@ const config = {
     sessionName: process.env.WHATSAPP_SESSION_NAME || 'personal-assistant-session',
     autoReply: process.env.AUTO_REPLY === 'true',
     
-    // Features
-    enableCommands: process.env.ENABLE_COMMANDS === 'true',
-    enableAutoReply: process.env.ENABLE_AUTO_REPLY === 'true',
-    enableLogging: process.env.ENABLE_LOGGING === 'true',
-    enableWorkHours: process.env.ENABLE_WORK_HOURS === 'true',
-    enableProfessionalMode: process.env.ENABLE_PROFESSIONAL_MODE === 'true',
+    // Features (Railway deployment üçün default true)
+    enableCommands: process.env.ENABLE_COMMANDS !== 'false',
+    enableAutoReply: process.env.ENABLE_AUTO_REPLY !== 'false',
+    enableLogging: process.env.ENABLE_LOGGING !== 'false', 
+    enableWorkHours: process.env.ENABLE_WORK_HOURS !== 'false',
+    enableProfessionalMode: process.env.ENABLE_PROFESSIONAL_MODE !== 'false',
     enableGroupChat: process.env.ENABLE_GROUP_CHAT === 'true',
     
     // Personal Info
