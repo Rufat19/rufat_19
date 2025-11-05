@@ -227,6 +227,20 @@ class WhatsAppBot {
         
         const workStatus = config.getWorkStatus();
         
+        // Borc istəyənlər üçün avtomatik cavab
+        if (this.isMoneyRequest(messageBody)) {
+            console.log('💰 Borc istəyi aşkarlandı - polite decline cavabı göndərilir');
+            const excuseReplies = [
+                '😅 Üzr istəyirəm, hal-hazırda vəziyyətim çox çətindir.\n💼 Bu ay maddi durumum əlverişli deyil.',
+                '🙏 Çox üzr istəyirəm, amma ayın axırına qədər çox sıxışmışam.\n💸 Gələn dəfə kömək etməyə çalışaram.',
+                '😔 Təəssüf ki, hazırda imkanım yoxdur.\n📊 Mali vəziyyət çox gərgindir.',
+                '🤝 Çox istərdim kömək edim, amma bu aralar çox çətinlik çəkirəm.\n💰 Bağışlayın.'
+            ];
+            const excuseReply = excuseReplies[Math.floor(Math.random() * excuseReplies.length)];
+            await this.sendMessage(message.from, excuseReply);
+            return;
+        }
+        
         // Təcili hallar üçün dərhal cavab (24/7)
         if (messageBody.includes('təcili') || messageBody.includes('urgent') || messageBody.includes('emergency')) {
             await this.sendMessage(message.from, '🚨 Təcili hal qeyd edildi!\n📞 Dərhal əlaqə saxlayacağam\n⚠️ Zəng gözləyin...');
@@ -635,13 +649,13 @@ class WhatsAppBot {
             return professionalGreetings[Math.floor(Math.random() * professionalGreetings.length)];
         }
         
-        // Təbriklər üçün xüsusi reaksiyalar
+        // Təbriklər üçün sadə və gözəl reaksiyalar
         if (this.isCelebrationMessage(trigger)) {
             const celebrationExtras = [
-                '\n\n🎈 Bu xoş xəbəri paylaşdığın üçün çox sevinirəm!',
-                '\n\n🌟 Belə gözəl anları birlikdə yaşamaq çox xoşdur!',
-                '\n\n💫 Bu gün sənin üçün xüsusi bir gündür!',
-                '\n\n🎊 Həyatında daha çox belə xoş anlar olsun!'
+                ' Çox xoşbəxt günlər arzulayıram! 🌟',
+                ' Allah bərəkət versin! 💫',
+                ' Ən gözəl arzularımla! 🎊',
+                ' Xoşbəxtlik və sağlamlıq! 🌸'
             ];
             const extra = celebrationExtras[Math.floor(Math.random() * celebrationExtras.length)];
             return reply + extra;
@@ -668,6 +682,17 @@ class WhatsAppBot {
             'yeni il', 'evlilik', 'nişan', 'məzuniyyət', 'uğur'
         ];
         return personalKeywords.some(keyword => messageBody.includes(keyword));
+    }
+    
+    isMoneyRequest(messageBody) {
+        const moneyKeywords = [
+            'borc', 'borc ver', 'borcu var', 'pul', 'pul ver', 'pulu var', 
+            'kömək et', 'yardım et', 'ayın axırı', 'ayın sonu', 'gələn ay', 
+            'növbəti ay', 'manat', 'dollar', 'avro', 'kredit', 'ödəmə',
+            'ödəyə bilmir', 'ödə', 'qaytararam', 'geri verərəm', 'borcu',
+            'pulu yox', 'pulim yox', 'çətin durumda', 'maddi', 'malik çıx'
+        ];
+        return moneyKeywords.some(keyword => messageBody.includes(keyword));
     }
 
     async sendFriendlyResponse(chatId, messageBody) {

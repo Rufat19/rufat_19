@@ -98,13 +98,13 @@ const config = {
         'həftə sonu': '📅 Həftə sonunda da layihələrlə məşğul oluram.',
         'boş vaxt': '💻 Adətən texniki layihələrlə məşğul oluram.',
         
-        // Birthday & Name day responses (proper celebration responses)
-        'doğum günü': '🎉 Təşəkkür edirəm! Çox xoş oldu yazdığın üçün!',
-        'doğum gününüz': '🎂 Sağ ol! Bu gözəl diqqətinə görə minnətdaram!',
-        'ad günü': '🎈 Təşəkkür edirəm! Yadında saxladığın üçün çox sevinirəm!',
-        'ad gününüz': '🌟 Sağ ol! Bu xoş sözlər çox xoşuma gəldi!',
-        'təbrik': '💫 Çox sağ ol! Dəstəyin həmişə qiymətlidir!',
-        'təbrik edirəm': '🙏 Təşəkkür edirəm! Belə dostların olması çox gözəldir!',
+        // Birthday & Name day responses (short and sweet)
+        'doğum günü': '🎉 Təşəkkür edirəm!',
+        'doğum gününüz': '🎂 Çox sağ olun!',
+        'ad günü': '🎈 Təşəkkür edirəm!',
+        'ad gününüz': '🌟 Sağ olun!',
+        'təbrik': '💫 Çox təşəkkür edirəm!',
+        'təbrik edirəm': '🙏 Təşəkkür edirəm!',
         
         // Holiday responses
         'bayram': 'Təşəkkür edirəm! Sizin də bayramınız mübarək olsun!',
