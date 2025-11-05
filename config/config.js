@@ -28,6 +28,7 @@ const config = {
     // Personal Settings
     ownerPhone: process.env.OWNER_PHONE || '994773632066',
     spousePhone: process.env.SPOUSE_PHONE || '994556919601', // Həyat yoldaşının nömrəsi
+    spouseName: process.env.SPOUSE_NAME || 'Həyat yoldaşım', // Həyat yoldaşının adı
     timezone: process.env.TIMEZONE || 'Asia/Baku',
     workStart: process.env.WORK_START || '09:00',
     workEnd: process.env.WORK_END || '18:00',
@@ -253,9 +254,9 @@ const config = {
     // Avtomatik mesaj funksiyaları
     getEveningMessage() {
         const messages = [
-            'Salam! İşdən çıxıram. Gəlirəm, nəsə almaq lazımdır? 🛒',
-            'İş bitdi! Yolda nəsə almaq lazımdır? Yazın məlumat 📝',
-            'Evə gəlirəm. Lazım olan şey varmı? 🏠'
+            `Salam ${this.spouseName}! İşdən çıxıram. Gəlirəm, nəsə almaq lazımdır? 🛒`,
+            `${this.spouseName}, iş bitdi! Yolda nəsə almaq lazımdır? Yazın məlumat 📝`,
+            `${this.spouseName}, evə gəlirəm. Lazım olan şey varmı? 🏠`
         ];
         const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
         return selectedMessage + '\n\n🤖 _Bu mesaj avtomatik göndərilib_';
@@ -263,9 +264,9 @@ const config = {
 
     getFridayMessage() {
         const messages = [
-            'Salam! Bugün dostlarımla görüşəcəm. Vacib mənimlə bağlı nəsə işin var? 👥',
-            'Bu gün dostlarla görüş günü! Mənə vacib deyəcəyin nəsə varmı? 🤝',
-            'Dostlarla çıxacam. Məndən xüsusi bir işin varmı? 👫'
+            `Salam ${this.spouseName}! Bugün dostlarımla görüşəcəm. Vacib mənimlə bağlı nəsə işin var? 👥`,
+            `${this.spouseName}, bu gün dostlarla görüş günü! Mənə vacib deyəcəyin nəsə varmı? 🤝`,
+            `${this.spouseName}, dostlarla çıxacam. Məndən xüsusi bir işin varmı? 👫`
         ];
         const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
         return selectedMessage + '\n\n🤖 _Bu mesaj avtomatik göndərilib_';
@@ -274,9 +275,9 @@ const config = {
     getCheckInMessage(time) {
         // Yalnız nahar vaxtı mesajları
         const messages = [
-            'Nahar vaxtı! Necə keçir gün? Yemək yedinizmi? 🍽️',
-            'Günorta! Evdə hər şey qaydasındadır? 🏠',
-            'Nahar fasiləsi! Necəsiniz? Uşaqlar yaxşıdır? ☺️'
+            `Salam ${this.spouseName}! Nahar vaxtı! Necə keçir gün? Yemək yedinizmi? 🍽️`,
+            `${this.spouseName}, günorta! Evdə hər şey qaydasındadır? 🏠`,
+            `${this.spouseName}, nahar fasiləsi! Necəsiniz? Uşaqlar yaxşıdır? ☺️`
         ];
         const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
         return selectedMessage + '\n\n🤖 _Bu mesaj avtomatik göndərilib_\n📱 _İş vaxtı zaman ayıra bilmirəm, tezliklə geri dönüş edəcəm_';

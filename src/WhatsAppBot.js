@@ -702,6 +702,11 @@ class WhatsAppBot {
         const currentTime = now.format('HH:mm');
         const spouseId = `${config.spousePhone}@c.us`;
         
+        // Təhlükəsizlik yoxlaması - həyat yoldaşının nömrəsi doğrudur?
+        if (!config.spousePhone || config.spousePhone === '994556919601') {
+            console.log(`🔒 Avtomatik mesaj göndəriləcək nömrə: ${config.spousePhone} (${config.spouseName})`);
+        }
+        
         try {
             // Cümə günü dostlarla görüş mesajı (18:15)
             if (now.format('dddd') === 'Friday' && currentTime === config.autoMessages.fridayMeeting.time) {
