@@ -188,7 +188,11 @@ class WhatsAppBot {
     }
     
     async handleAutoReply(message) {
-        const messageBody = message.body.toLowerCase().trim();
+        let messageBody = message.body.toLowerCase().trim();
+        
+        // Söz variantlarını normalizə et
+        messageBody = this.normalizeMessage(messageBody);
+        
         const workStatus = config.getWorkStatus();
         
         // Təcili hallar üçün dərhal cavab (24/7)
@@ -613,6 +617,55 @@ class WhatsAppBot {
         
         const randomResponse = responses[Math.floor(Math.random() * responses.length)];
         await this.sendMessage(chatId, randomResponse);
+    }
+
+    // Mesaj normalizasiyası - müxtəlif yazılış variantlarını eyniləşdir
+    normalizeMessage(message) {
+        let normalized = message;
+        
+        // Necəsən variantları (bütün mümkün yazılışlar)
+        normalized = normalized.replace(/ne[cs]e?s[ae]?n/g, 'necəsən');
+        normalized = normalized.replace(/nec[ae]s[ae]n/g, 'necəsən');
+        
+        // Salam variantları 
+        normalized = normalized.replace(/s[ae]l[ae]m/g, 'salam');
+        normalized = normalized.replace(/selam/g, 'salam');
+        
+        // Nə var nə yox variantları
+        normalized = normalized.replace(/ne\s?var\s?ne\s?yox/g, 'nə var nə yox');
+        normalized = normalized.replace(/nevar\s?neyox/g, 'nə var nə yox');
+        
+        // Nə edirsən variantları
+        normalized = normalized.replace(/ne\s?edir?s[ae]n/g, 'nə edirsən');
+        normalized = normalized.replace(/neyirs[ae]n/g, 'nə edirsən');
+        
+        // Təşəkkür variantları
+        normalized = normalized.replace(/te[sz]ekkur/g, 'təşəkkür');
+        normalized = normalized.replace(/sagol/g, 'sağ ol');
+        
+        // Doğum günü variantları
+        normalized = normalized.replace(/do[gq]um\s?g[uy]n[uy]/g, 'doğum günü');
+        normalized = normalized.replace(/dogum\s?gunu/g, 'doğum günü');
+        
+        // Ad günü variantları
+        normalized = normalized.replace(/ad\s?g[uy]n[uy]/g, 'ad günü');
+        normalized = normalized.replace(/ad\s?gunu/g, 'ad günü');
+        
+        // Bayram variantları
+        normalized = normalized.replace(/bayram[i]?n[i]?z?\s?mubar[ae]k/g, 'bayram');
+        
+        // Təbrik variantları
+        normalized = normalized.replace(/tebrik/g, 'təbrik');
+        
+        // Gecə/axşam/sabah variantları
+        normalized = normalized.replace(/gec[ae]n\s?xeyir/g, 'gecən xeyir');
+        normalized = normalized.replace(/ax[sz]am[i]?n\s?xeyir/g, 'axşamın xeyir');
+        normalized = normalized.replace(/sabah[i]?n\s?xeyir/g, 'sabahın xeyir');
+        
+        // Boşluqları təmizlə
+        normalized = normalized.replace(/\s+/g, ' ').trim();
+        
+        return normalized;
     }
 
     async sendMessage(chatId, message) {

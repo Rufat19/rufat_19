@@ -98,15 +98,15 @@ const config = {
         'təbrik edirəm': 'Təşəkkür edirəm! Xoş sözləriniz üçün minnətdaram.',
         
         // Holiday responses
-        'bayram': 'Təşəkkür edirəm! Bayramınız da mübarək olsun!',
-        'bayramınız mübarək': 'Təşəkkür edirəm! Bayramınız da mübarək olsun!',
-        'ramazan': 'Təşəkkür edirəm! Ramazan ayınız mübarək!',
-        'qurban bayramı': 'Təşəkkür edirəm! Bayramınız mübarək olsun!',
-        'ramazan bayramı': 'Təşəkkür edirəm! Bayramınız mübarək olsun!',
+        'bayram': 'Təşəkkür edirəm! Sizin də bayramınız mübarək olsun!',
+        'bayramınız mübarək': 'Təşəkkür edirəm! Sizin də bayramınız mübarək olsun!',
+        'ramazan': 'Təşəkkür edirəm! Sizin də Ramazan ayınız mübarək!',
+        'qurban bayramı': 'Təşəkkür edirəm! Sizin də bayramınız mübarək olsun!',
+        'ramazan bayramı': 'Təşəkkür edirəm! Sizin də bayramınız mübarək olsun!',
         
         // New Year and special occasions
-        'yeni il': 'Təşəkkür edirəm! Yeni iliniz mübarək olsun!',
-        'yeni iliniz': 'Təşəkkür edirəm! Yeni iliniz mübarək olsun!',
+        'yeni il': 'Təşəkkür edirəm! Sizin də yeni iliniz mübarək olsun!',
+        'yeni iliniz': 'Təşəkkür edirəm! Sizin də yeni iliniz mübarək olsun!',
         
         // Special occasions - gratitude responses
         'evlilik': 'Təşəkkür edirəm! Xoş sözləriniz üçün minnətdaram.',
