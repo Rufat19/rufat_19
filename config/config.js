@@ -98,30 +98,30 @@ const config = {
         'həftə sonu': '📅 Həftə sonunda da layihələrlə məşğul oluram.',
         'boş vaxt': '💻 Adətən texniki layihələrlə məşğul oluram.',
         
-        // Birthday & Name day responses (short and sweet)
-        'doğum günü': '🎉 Təşəkkür edirəm!',
-        'doğum gününüz': '🎂 Çox sağ olun!',
-        'ad günü': '🎈 Təşəkkür edirəm!',
-        'ad gününüz': '🌟 Sağ olun!',
-        'təbrik': '💫 Çox təşəkkür edirəm!',
-        'təbrik edirəm': '🙏 Təşəkkür edirəm!',
+        // Birthday & Name day responses (unified response)
+        'doğum günü': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
+        'doğum gününüz': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
+        'ad günü': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
+        'ad gününüz': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
+        'təbrik': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
+        'təbrik edirəm': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
         
-        // Holiday responses
-        'bayram': 'Təşəkkür edirəm! Sizin də bayramınız mübarək olsun!',
-        'bayramınız mübarək': 'Təşəkkür edirəm! Sizin də bayramınız mübarək olsun!',
-        'ramazan': 'Təşəkkür edirəm! Sizin də Ramazan ayınız mübarək!',
-        'qurban bayramı': 'Təşəkkür edirəm! Sizin də bayramınız mübarək olsun!',
-        'ramazan bayramı': 'Təşəkkür edirəm! Sizin də bayramınız mübarək olsun!',
+        // Holiday responses (unified)
+        'bayram': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
+        'bayramınız mübarək': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
+        'ramazan': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
+        'qurban bayramı': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
+        'ramazan bayramı': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
         
-        // New Year and special occasions
-        'yeni il': 'Təşəkkür edirəm! Sizin də yeni iliniz mübarək olsun!',
-        'yeni iliniz': 'Təşəkkür edirəm! Sizin də yeni iliniz mübarək olsun!',
+        // New Year and special occasions (unified)
+        'yeni il': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
+        'yeni iliniz': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
         
-        // Special occasions - gratitude responses
-        'evlilik': 'Təşəkkür edirəm! Xoş sözləriniz üçün minnətdaram.',
-        'nişan': 'Təşəkkür edirəm! Diqqətiniz üçün minnətdaram.',
-        'məzuniyyət': 'Təşəkkür edirəm! Dəstəyiniz üçün minnətdaram.',
-        'iş': 'Təşəkkür edirəm! Xoş sözləriniz üçün minnətdaram.'
+        // Special occasions (unified)
+        'evlilik': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
+        'nişan': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
+        'məzuniyyət': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲',
+        'iş': 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲'
     },
     
     // Personal Assistant Commands

@@ -649,16 +649,9 @@ class WhatsAppBot {
             return professionalGreetings[Math.floor(Math.random() * professionalGreetings.length)];
         }
         
-        // Təbriklər üçün sadə və gözəl reaksiyalar
+        // Təbriklər üçün vahid cavab
         if (this.isCelebrationMessage(trigger)) {
-            const celebrationExtras = [
-                ' Çox xoşbəxt günlər arzulayıram! 🌟',
-                ' Allah bərəkət versin! 💫',
-                ' Ən gözəl arzularımla! 🎊',
-                ' Xoşbəxtlik və sağlamlıq! 🌸'
-            ];
-            const extra = celebrationExtras[Math.floor(Math.random() * celebrationExtras.length)];
-            return reply + extra;
+            return 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲';
         }
         
         return reply;
