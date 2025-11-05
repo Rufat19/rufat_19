@@ -85,38 +85,40 @@ class WhatsAppBot {
             // Botun öz mesajlarını ignore et
             if (message.fromMe) return;
             
-            // Qrup chat konfiqurasiyasını yoxla
             const chat = await message.getChat();
-            if (chat.isGroup && !config.enableGroupChat) {
-                if (config.enableLogging) {
-                    console.log(`📵 Qrup mesajı ignore edildi: ${chat.name || 'Group Chat'}`);
-                }
-                return;
-            }
-            
             const messageBody = message.body.toLowerCase().trim();
             const isCommand = messageBody.startsWith(config.commandPrefix);
-            
-            // İş statusunu yoxla
-            const workStatus = config.getWorkStatus();
             
             // DEBUG məlumatları (həmişə göstər)
             console.log('🔍 DEBUG: Mesaj alındı');
             console.log(`📨 Mesaj: "${message.body}"`);
             console.log(`👤 Göndərən: ${message.from}`);
             console.log(`💬 Chat növü: ${chat.isGroup ? 'Qrup' : 'Şəxsi'}`);
+            console.log(`🎯 Komanda?: ${isCommand}`);
             console.log(`⚙️ Qrup chat aktiv: ${config.enableGroupChat}`);
             console.log(`🤖 Auto reply aktiv: ${config.enableAutoReply}`);
-            console.log(`⏰ İş statusu: ${workStatus}`);
+            console.log(`🔧 Commands aktiv: ${config.enableCommands}`);
             
-            if (config.enableLogging) {
-                console.log(`📨 Mesaj alındı: "${message.body}" - ${message.from} (Status: ${workStatus})`);
-            }
-            
-            // Əmr işləmə
+            // Komanda həmişə işlənir (qrupda və ya şəxsi söhbətdə)
             if (isCommand && config.enableCommands) {
                 console.log('🎯 Komanda aşkarlandı, işlənir...');
                 await this.handleCommand(message);
+                return; // Komanda işləndikdən sonra auto reply-a ehtiyac yox
+            }
+            
+            // Qrup mesajları üçün auto reply yoxla
+            if (chat.isGroup && !config.enableGroupChat) {
+                if (config.enableLogging) {
+                    console.log(`📵 Qrup mesajı (non-command) ignore edildi: ${chat.name || 'Group Chat'}`);
+                }
+                return;
+            }
+            
+            // İş statusunu yoxla
+            const workStatus = config.getWorkStatus();
+            
+            if (config.enableLogging) {
+                console.log(`📨 Mesaj alındı: "${message.body}" - ${message.from} (Status: ${workStatus})`);
             }
             // Auto reply (ağıllı sistem)
             else if (config.enableAutoReply) {

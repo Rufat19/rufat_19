@@ -23,7 +23,7 @@ const config = {
     enableLogging: process.env.ENABLE_LOGGING !== 'false', 
     enableWorkHours: process.env.ENABLE_WORK_HOURS !== 'false',
     enableProfessionalMode: process.env.ENABLE_PROFESSIONAL_MODE !== 'false',
-    enableGroupChat: process.env.ENABLE_GROUP_CHAT === 'true',
+    enableGroupChat: process.env.ENABLE_GROUP_CHAT !== 'false', // Qruplarda komandaları aktivləşdir
     
     // Personal Settings
     ownerPhone: process.env.OWNER_PHONE || '994773632066',
