@@ -622,17 +622,17 @@ class WhatsAppBot {
     async getContextualReply(trigger, reply, workStatus) {
         // İş saatlarında salam daha rəsmi
         if (trigger === 'salam' && workStatus === 'working') {
-            return '👋 Salam! İşdəyəm hal-hazırda, amma yazışa bilərəm 😊\n💼 İş məsələsi varsa: @Sosial_Zone_Robot\n💬 Adi söhbət üçün burada yazışaq';
+            return '👋 Salam! İş saatlarındayam, amma sizə kömək edə bilərəm.\n💼 İş məsələsi üçün: @Sosial_Zone_Robot\n💬 Digər sorğular üçün burada yazın';
         }
         
-        // Axşam və həftə sonu daha dostcasına
+        // İş saatları bitdikdə də professional
         if ((trigger === 'salam' || trigger === 'hello') && workStatus === 'offline') {
-            const friendlyGreetings = [
-                '👋 Salam dostum! İş bitib, rahatlıq vaxtıdır 😄\n🎮 Nə var nə yox? Necə keçir günlər?',
-                '😊 Salamlar! İş saatı bitib, indi dostlarla söhbət vaxtı\n☕ Necəsən? Yenilik var?',
-                '🌙 Salam! Axşam saatları, daha rahat yazışa bilərik\n💬 Nə yeniliklər var?'
+            const professionalGreetings = [
+                '👋 Salam! İş saatları bitib, amma sizə yardım etməyə hazıram.\n💬 Hansı məlumat lazımdır?',
+                '😊 Salamlar! Hal-hazırda müsaitəm.\n📞 Sizə necə kömək edə bilərəm?',
+                '🌙 Salam! İşdən sonrakı vaxtımda da əlçatanəm.\n� Nəyə ehtiyacınız var?'
             ];
-            return friendlyGreetings[Math.floor(Math.random() * friendlyGreetings.length)];
+            return professionalGreetings[Math.floor(Math.random() * professionalGreetings.length)];
         }
         
         // Təbriklər üçün xüsusi reaksiyalar
@@ -677,16 +677,16 @@ class WhatsAppBot {
         
         if (workStatus === 'working') {
             responses = [
-                '💼 İşdəyəm hal-hazırda, amma söhbət edə bilərik!\n😊 Nə yeniliklər var?',
-                '👨‍💻 Kod yazıram, amma fasilə də lazımdır!\n💬 Nə var nə yox?',
-                '💻 İş saatı, amma dostlar üçün həmişə vaxt var!\n😄 Necəsən?'
+                '💼 İş saatlarındayam. Sizə necə kömək edə bilərəm?',
+                '👨‍💻 Hal-hazırda layihələrlə məşğulam. Nə ilə əlaqədar yazırsınız?',
+                '💻 İş prosesindəyəm. Sizin məsələnizi dinləməyə hazıram.'
             ];
         } else {
             responses = [
-                '😄 İş bitib, indi rahat söhbət vaxtı!\n🎯 Nə edirsən axşam?',
-                '🌙 Axşam saatları, daha rahat yazışırıq\n☕ Çay içib dinc otururuam, sən nə edirsən?',
-                '🎮 Boş vaxtım, nə danışaq?\n😊 Yenilik var həyatında?',
-                '📱 Həftə sonu + axşam = dostlarla söhbət vaxtı!\n💬 Necə keçir günlər?'
+                '🌙 İş saatları bitib. Sizə necə kömək edə bilərəm?',
+                '⏰ Hal-hazırda müsaitəm. Hansı məlumatlar lazımdır?',
+                '📱 İşdən sonrakı vaxtımdayam. Sizin sorğunuz nədir?',
+                '� Vaxt müsaitdir. Nə barədə danışmaq istəyirsiniz?'
             ];
         }
         

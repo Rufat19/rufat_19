@@ -79,24 +79,24 @@ const config = {
         'menu': '📱 Əsas menyu üçün !menu yazın',
         'keyboard': '🎯 İnteraktiv menyu üçün !menu yazın',
         
-        // Friendly responses (professional but warm)
-        'necəsən': '😊 Yaxşıyam, işlərlə məşğulam. Sən necəsən?',
-        'nə var nə yox': '💻 Layihələrlə məşğulam, hamısı qaydasında. Sən nə edirsən?',
-        'nə edirsən': '⌨️ Kod yazıram, botlarla oynayıram. Normal həyat 😄',
-        'darıxmışam': '😢 Hə bəzən darıxırıq. Tez görüşürük inşallah!',
-        'sabahın xeyir': '🌅 Sabahın xeyir! Gözəl gün olsun!',
-        'axşamın xeyir': '🌆 Axşamın xeyir! Necə keçdi günün?',
-        'gecən xeyir': '🌙 Gecən xeyir! Rahat yat!',
+        // Professional responses
+        'necəsən': '� Yaxşıyam, təşəkkür edirəm. Layihələrlə məşğulam.',
+        'nə var nə yox': '� Hər şey qaydasındadır. İş prosesi normal gedir.',
+        'nə edirsən': '⌨️ Software development üzərində çalışıram.',
+        'darıxmışam': '� Məlumat və ya kömək lazımdırsa, əlaqə saxlayın.',
+        'sabahın xeyir': '🌅 Sabahınız xeyir olsun!',
+        'axşamın xeyir': '🌆 Axşamınız xeyir olsun!',
+        'gecən xeyir': '🌙 Gecəniz xeyir olsun!',
         
         // Tech & Social Media
-        'bot': '🤖 Bot yazıram, əylənirəm. Telegram botum var: https://t.me/Sosial_Zone_Robot',
-        'telegram': '📱 Telegramda aktiv oluram: https://t.me/Sosial_Zone_Robot',
-        'sosial': '🌐 Sosial kanala bax: https://t.me/Sosial_Zone_Robot',
-        'whatsapp': '📲 WhatsApp botları yazıram. Bu da onlardan biri!',
+        'bot': '🤖 Bot development ilə məşğulam. Telegram: https://t.me/Sosial_Zone_Robot',
+        'telegram': '📱 Telegram kanalım: https://t.me/Sosial_Zone_Robot',
+        'sosial': '🌐 Sosial media: https://t.me/Sosial_Zone_Robot',
+        'whatsapp': '📲 WhatsApp bot development sahəsində çalışıram.',
         
         // Weekend & Off-hours responses  
-        'həftə sonu': '🏖️ Həftə sonunda da işləyirəm bəzən. Workaholic-əm 😅',
-        'boş vaxt': '⌨️ Boş vaxtım çox az olur, hep kodla oynayıram.',
+        'həftə sonu': '📅 Həftə sonunda da layihələrlə məşğul oluram.',
+        'boş vaxt': '💻 Adətən texniki layihələrlə məşğul oluram.',
         
         // Birthday & Name day responses (proper celebration responses)
         'doğum günü': '🎉 Təşəkkür edirəm! Çox xoş oldu yazdığın üçün!',
