@@ -66,8 +66,8 @@ const config = {
     
     // Auto replies for handmade bag business
     autoReplies: {
-        'salam': 'Salam! Rüfət Babayev-in şəxsi assistenti.\nİş saatları: 09:00-18:00\nKömək: !help',
-        'hello': 'Hello! Rüfət Babayev\'s personal assistant.\nWorking hours: 09:00-18:00\nHelp: !help',
+        'salam': 'Salam və xoş gəlmisiniz! 👋\n\n🤖 Rüfət Babayev-in şəxsi assistenti\n⏰ İş saatları: 09:00-18:00\n\n━━━ SÜRƏTLİ MENYu ━━━\n1️⃣ Şəxsi məlumatlar\n2️⃣ Əlaqə məlumatları \n3️⃣ İş layihələri\n4️⃣ CV və Portfolio\n5️⃣ İş statusu\n\n💡 Rəqəm yazın və ya !help əmri',
+        'hello': 'Hello and welcome! 👋\n\n🤖 Rüfət Babayev\'s personal assistant\n⏰ Working hours: 09:00-18:00\n\n━━━ QUICK MENU ━━━\n1️⃣ Personal info\n2️⃣ Contact details\n3️⃣ Work projects\n4️⃣ CV & Portfolio\n5️⃣ Work status\n\n💡 Type a number or !help command',
         'işdə': '💼 Hal-hazırda işdəyəm. Cavab gecikə bilər.\n⏰ İş saatları: 09:00-18:00\n📞 Təcili hallarda zəng edin',
         'working': '💼 Currently at work. Response might be delayed.\n⏰ Working hours: 09:00-18:00\n� Call for urgent matters',
         'görüşmək': '🤝 Görüşmək üçün !randevu yazın\n📅 İş saatları: 09:00-18:00',

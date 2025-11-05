@@ -277,34 +277,49 @@ class WhatsAppBot {
     
     async sendHelpMessage(chatId) {
         const workStatus = config.getWorkStatus();
-        let helpText = `🤖 *${config.botName} - Kömək*\\n\\n`;
         
-        helpText += `💼 *Əsas Komandalar:*\\n`;
-        helpText += `• !help - Bütün əmrləri göstərir\\n`;
-        helpText += `• !info - Şəxsi məlumatlar\\n`;
-        helpText += `• !status - Hazırkı iş statusu\\n`;
-        helpText += `• !contact - Əlaqə məlumatları\\n`;
-        helpText += `• !projects - İş layihələri\\n`;
-        helpText += `• !resume - CV və portfolio\\n`;
-        helpText += `• !time - Bakı vaxtı\\n\\n`;
+        let helpText = `🤖 *${config.botName} - Kömək Menyusu*\n\n`;
         
-        helpText += `⚡ *Sürətli Seçimlər:*\\n`;
-        helpText += `• *1* - Şəxsi məlumatlar (!info)\\n`;
-        helpText += `• *2* - Əlaqə detalları (!contact)\\n`;
-        helpText += `• *3* - İş layihələri (!projects)\\n`;
-        helpText += `• *4* - CV məlumatları (!resume)\\n`;
-        helpText += `• *5* - İş statusu (!status)\\n\\n`;
+        helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        helpText += `💼 *ƏSAS KOMANDALAR*\n`;
+        helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        helpText += `• !info      - Şəxsi məlumatlar\n`;
+        helpText += `• !contact   - Əlaqə məlumatları\n`;
+        helpText += `• !projects  - İş layihələri\n`;
+        helpText += `• !resume    - CV və Portfolio\n`;
+        helpText += `• !status    - İş statusu\n`;
+        helpText += `• !time      - Bakı vaxtı\n`;
+        helpText += `• !help      - Bu menyu\n\n`;
         
-        helpText += `💬 *Açar Sözlər:*\\n`;
-        helpText += `"salam", "necəsən", "işdə", "bot", "telegram"\\n\\n`;
+        helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        helpText += `⚡ *SÜRƏTLİ SEÇİMLƏR*\n`;
+        helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        helpText += `Sadəcə rəqəm yazın:\n`;
+        helpText += `• 1 → Şəxsi məlumatlar\n`;
+        helpText += `• 2 → Əlaqə məlumatları\n`;
+        helpText += `• 3 → İş layihələri\n`;
+        helpText += `• 4 → CV və Portfolio\n`;
+        helpText += `• 5 → İş statusu\n\n`;
+        
+        helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        helpText += `💬 *AÇAR SÖZLƏR*\n`;
+        helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        helpText += `Salamlaşma: salam, hello\n`;
+        helpText += `Hal-əhval: necəsən, nə var\n`;
+        helpText += `İş haqqında: işdə, layihə\n`;
+        helpText += `Bot: bot, telegram\n\n`;
         
         if (workStatus === 'working') {
-            helpText += `💼 *İş Saatı:* Peşəkar rejim aktiv\\n`;
-            helpText += `🤖 İş məsələləri: @Sosial_Zone_Robot`;
+            helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+            helpText += `💼 *HAL-HAZIRDA İŞ SAATINDAYıQ*\n`;
+            helpText += `🤖 Peşəkar rejim aktiv\n`;
+            helpText += `📞 Telegram: @Sosial_Zone_Robot\n`;
         } else {
-            helpText += `🌙 *İş Saatı Bitib:* Dostcasına söhbət\\n`;
-            helpText += `😊 Rahat yazışa bilərik!`;
+            helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+            helpText += `🌙 *İŞ SAATI BİTİB*\n`;
+            helpText += `😊 Dostcasına söhbət edə bilərik!\n`;
         }
+        helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
         
         await this.sendMessage(chatId, helpText);
     }
@@ -669,25 +684,68 @@ class WhatsAppBot {
     normalizeMessage(message) {
         let normalized = message;
         
-        // Necəsən variantları (bütün mümkün yazılışlar)
-        normalized = normalized.replace(/ne[cs]e?s[ae]?n/g, 'necəsən');
-        normalized = normalized.replace(/nec[ae]s[ae]n/g, 'necəsən');
-        
         // Salam variantları 
         normalized = normalized.replace(/s[ae]l[ae]m/g, 'salam');
         normalized = normalized.replace(/selam/g, 'salam');
+        normalized = normalized.replace(/selamlar/g, 'salam');
+        normalized = normalized.replace(/salamlar/g, 'salam');
+        
+        // Necəsən variantları (bütün mümkün yazılışlar)
+        normalized = normalized.replace(/ne[cs]e?s[ae]?n/g, 'necəsən');
+        normalized = normalized.replace(/nec[ae]s[ae]n/g, 'necəsən');
+        normalized = normalized.replace(/neces[ae]n/g, 'necəsən');
+        normalized = normalized.replace(/nejesan/g, 'necəsən');
         
         // Nə var nə yox variantları
         normalized = normalized.replace(/ne\s?var\s?ne\s?yox/g, 'nə var nə yox');
         normalized = normalized.replace(/nevar\s?neyox/g, 'nə var nə yox');
+        normalized = normalized.replace(/ne\s?var\s?neyox/g, 'nə var nə yox');
+        normalized = normalized.replace(/nevar\s?ne\s?yox/g, 'nə var nə yox');
         
         // Nə edirsən variantları
         normalized = normalized.replace(/ne\s?edir?s[ae]n/g, 'nə edirsən');
         normalized = normalized.replace(/neyirs[ae]n/g, 'nə edirsən');
+        normalized = normalized.replace(/ne\s?yiirsan/g, 'nə edirsən');
+        normalized = normalized.replace(/ne\s?ediyrsen/g, 'nə edirsən');
+        
+        // İşdə variantları
+        normalized = normalized.replace(/i[sz]de/g, 'işdə');
+        normalized = normalized.replace(/i[sz]te/g, 'işdə');
+        normalized = normalized.replace(/working/g, 'işdə');
+        
+        // Görüşmək variantları
+        normalized = normalized.replace(/gor[uy][sz]mek/g, 'görüşmək');
+        normalized = normalized.replace(/gorusmek/g, 'görüşmək');
+        normalized = normalized.replace(/meeting/g, 'görüşmək');
+        
+        // Layihə/Project variantları
+        normalized = normalized.replace(/layihe/g, 'layihə');
+        normalized = normalized.replace(/project/g, 'layihə');
+        normalized = normalized.replace(/projekti?/g, 'layihə');
+        
+        // CV variantları
+        normalized = normalized.replace(/ozgecmi[sz]/g, 'cv');
+        normalized = normalized.replace(/özgeçmi[sz]/g, 'cv');
+        normalized = normalized.replace(/resume/g, 'cv');
         
         // Təşəkkür variantları
         normalized = normalized.replace(/te[sz]ekkur/g, 'təşəkkür');
-        normalized = normalized.replace(/sagol/g, 'sağ ol');
+        normalized = normalized.replace(/tesekur/g, 'təşəkkür');
+        normalized = normalized.replace(/sagol/g, 'təşəkkür');
+        normalized = normalized.replace(/sag\s?ol/g, 'təşəkkür');
+        
+        // Darıxmışam variantları
+        normalized = normalized.replace(/dar[iy][xh]mi[sz]am/g, 'darıxmışam');
+        normalized = normalized.replace(/dariqmi[sz]am/g, 'darıxmışam');
+        
+        // Vaxt salamları variantları
+        normalized = normalized.replace(/sabah[iy]n\s?xeyir/g, 'sabahın xeyir');
+        normalized = normalized.replace(/ax[sz]am[iy]n\s?xeyir/g, 'axşamın xeyir');
+        normalized = normalized.replace(/gecen\s?xeyir/g, 'gecən xeyir');
+        
+        // Bot variantları
+        normalized = normalized.replace(/bott?/g, 'bot');
+        normalized = normalized.replace(/robot/g, 'bot');
         
         // Doğum günü variantları
         normalized = normalized.replace(/do[gq]um\s?g[uy]n[uy]/g, 'doğum günü');
