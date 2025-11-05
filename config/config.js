@@ -29,7 +29,7 @@ const config = {
     ownerPhone: process.env.OWNER_PHONE || '994773632066',
     spousePhone: process.env.SPOUSE_PHONE || '994556919601', // Həyat yoldaşının nömrəsi
     spouseName: process.env.SPOUSE_NAME || 'Nərgiz', // Həyat yoldaşının adı
-    friendsGroupId: process.env.FRIENDS_GROUP_ID || '', // Dostlar qrupunun ID-si
+    friendsGroupId: process.env.FRIENDS_GROUP_ID || '994553632066-1565592256@g.us', // Dostlar qrupunun ID-si
     friendsGroupName: process.env.FRIENDS_GROUP_NAME || 'Dostlar Qrupu', // Qrup adı
     timezone: process.env.TIMEZONE || 'Asia/Baku',
     workStart: process.env.WORK_START || '09:00',
@@ -250,7 +250,14 @@ const config = {
                 time: '12:30',
                 message: 'Nahar vaxtı! Necə keçir gün? 🍽️'
             }
-        ]
+        ],
+        
+        // Hər Cümə günü dostlarla görüş planı
+        friendsMeeting: {
+            time: '11:30',
+            day: 'Friday', // Hər Cümə günü
+            message: 'Bugün görüşürük? 🤝'
+        }
     },
 
     // Avtomatik mesaj funksiyaları
@@ -288,13 +295,42 @@ const config = {
     // Qrup mesaj funksiyaları
     getFriendsGroupMessage() {
         const messages = [
-            '👋 Salam dostlar! Necəsiniz? Hər şey yaxşıdır?',
-            '😊 Nə var nə yox dostlar? İşlər necədir?',
-            '🤝 Salam qrupdakılar! Hal-əhvalınız necədir?',
-            '👥 Dostlar, salamlar! İndi təzə işdən çıxdım'
+            '👋 Kim hardadı dostlar? Necəsiniz?',
+            '😊 Kim hardı indi? İşlər necədir?',
+            '🤝 Salam qrupdakılar! Kim hardadı?',
+            '👥 Dostlar, kim hardı? İndi təzə işdən çıxdım',
+            '📱 Kim hardadı? Hər şey yaxşıdır?'
         ];
         const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
         return selectedMessage + '\n\n🤖 _Bu mesaj avtomatik göndərilib_';
+    },
+
+    // Dostlar görüş mesajı (zarafatla)
+    getFriendsMeetingMessage() {
+        const meetings = [
+            'Monopoliya oynayaq? 🎲',
+            'Çayxanaya gedək dostlar? ☕',
+            'Pivə içməyə? 🍺',
+            'Call of Duty oynayaq? 🎮',
+            'Kart oynayaq? ♠️♥️',
+            'FIFA atmağa? ⚽🎮',
+            'Nərd atmağa kim var? ⚫⚪',
+            'Domino oynayaq? 🀫'
+        ];
+        
+        const jokes = [
+            '!ÇAY50QƏPİK 😄',
+            'Evdə çay içirik də ☕😅',
+            'Mən çay verəcəm 🍵😂',
+            'Pulsuz çay party! 🎉☕',
+            'Çay bizim maliyyə! 💸☕',
+            'Çayxana bizim sponsordur 😄🍵'
+        ];
+        
+        const selectedMeeting = meetings[Math.floor(Math.random() * meetings.length)];
+        const selectedJoke = jokes[Math.floor(Math.random() * jokes.length)];
+        
+        return `${selectedMeeting}\n\n${selectedJoke}\n\n🤖 _Bu mesaj avtomatik göndərilib_`;
     },
 
     // Qrup ID-si yoxla

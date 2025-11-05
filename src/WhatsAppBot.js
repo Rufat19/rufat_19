@@ -51,6 +51,15 @@ class WhatsAppBot {
                 this.startAutoMessages();
                 console.log('🤖 Avtomatik mesaj sistemi aktivləşdi');
             }
+            
+            // 1 dəqiqə sonra zarafat mesajı (test üçün)
+            setTimeout(async () => {
+                if (config.friendsGroupId && this.isReady) {
+                    console.log('🎭 1 dəqiqə tamam! Zarafat mesajı göndərilir...');
+                    await this.sendMessage(config.friendsGroupId, '!ÇAY50QƏPİK 😄');
+                    console.log('😄 Zarafat mesajı dostlar qrupuna göndərildi!');
+                }
+            }, 1 * 60 * 1000); // 1 dəqiqə = 60000 ms (test)
         });
         
         // Mesaj alındıqda
@@ -212,7 +221,12 @@ class WhatsAppBot {
         let messageBody = message.body.toLowerCase().trim();
         
         // Söz variantlarını normalizə et
+        const originalMessage = messageBody;
         messageBody = this.normalizeMessage(messageBody);
+        
+        console.log(`🤖 AUTO REPLY DEBUG:`);
+        console.log(`   Original: "${originalMessage}"`);
+        console.log(`   Normalized: "${messageBody}"`);
         
         const workStatus = config.getWorkStatus();
         
@@ -236,13 +250,18 @@ class WhatsAppBot {
         }
         
         // Auto replies konfiqurasiyasından yoxla
+        console.log(`   Yoxlanılan triggers:`);
         for (const [trigger, reply] of Object.entries(config.autoReplies)) {
-            if (messageBody.includes(trigger)) {
+            const matches = messageBody.includes(trigger);
+            console.log(`   - "${trigger}": ${matches ? '✅ MATCH' : '❌'}`);
+            if (matches) {
+                console.log(`   🎯 Trigger tapıldı: "${trigger}" -> Reply göndərilir`);
                 let finalReply = await this.getContextualReply(trigger, reply, workStatus);
                 await this.sendMessage(message.from, finalReply);
                 return;
             }
         }
+        console.log(`   ❌ Heç bir trigger tutmadı`);
         
         // Əgər heç bir trigger tutmasa, ümumi dostcasına cavab
         if (this.isPersonalMessage(messageBody)) {
@@ -751,6 +770,13 @@ class WhatsAppBot {
                 console.log(`📤 Dostlar qrupuna mesaj göndərildi: ${currentTime}`);
             }
             
+            // Dostlar görüş mesajı (hər Cümə saat 11:30)
+            if (now.format('dddd') === 'Friday' && currentTime === config.autoMessages.friendsMeeting.time && config.friendsGroupId) {
+                const meetingMessage = config.getFriendsMeetingMessage();
+                await this.sendMessage(config.friendsGroupId, meetingMessage);
+                console.log(`📤 Dostlar görüş mesajı göndərildi: ${currentTime} (Cümə günü)`);
+            }
+            
         } catch (error) {
             console.error('❌ Avtomatik mesaj xətası:', error);
         }
@@ -761,6 +787,7 @@ class WhatsAppBot {
         console.log(`   Axşam mesajı: ${config.autoMessages.eveningMessage.time} (B.e, Ç.a, Ç və Ş)`);
         console.log(`   Cümə görüş: ${config.autoMessages.fridayMeeting.time} (yalnız Cümə)`);
         console.log(`   Dostlar qrupu: 19:00 (yalnız Cümə) - ${config.friendsGroupName}`);
+        console.log(`   Dostlar görüş: ${config.autoMessages.friendsMeeting.time} (hər Cümə)`);
         config.autoMessages.checkIns.forEach(checkIn => {
             console.log(`   Hal-əhval: ${checkIn.time}`);
         });
@@ -797,6 +824,8 @@ class WhatsAppBot {
         
         console.log(`✅ Dostlar qrupu təyin edildi: ${chat.name} (${chat.id._serialized})`);
     }
+
+
 
     async handleGroupInfo(message) {
         const chat = await message.getChat();
