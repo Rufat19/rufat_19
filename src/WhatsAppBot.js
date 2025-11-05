@@ -51,15 +51,6 @@ class WhatsAppBot {
                 this.startAutoMessages();
                 console.log('🤖 Avtomatik mesaj sistemi aktivləşdi');
             }
-            
-            // 1 dəqiqə sonra zarafat mesajı (test üçün)
-            setTimeout(async () => {
-                if (config.friendsGroupId && this.isReady) {
-                    console.log('🎭 1 dəqiqə tamam! Zarafat mesajı göndərilir...');
-                    await this.sendMessage(config.friendsGroupId, '!ÇAY50QƏPİK 😄');
-                    console.log('😄 Zarafat mesajı dostlar qrupuna göndərildi!');
-                }
-            }, 1 * 60 * 1000); // 1 dəqiqə = 60000 ms (test)
         });
         
         // Mesaj alındıqda
