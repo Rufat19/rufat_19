@@ -134,8 +134,9 @@ class WhatsAppBot {
             if (config.enableLogging) {
                 console.log(`📨 Mesaj alındı: "${message.body}" - ${message.from} (Status: ${workStatus})`);
             }
+            
             // Auto reply (ağıllı sistem)
-            else if (config.enableAutoReply) {
+            if (config.enableAutoReply) {
                 console.log('🤖 Auto reply işləyir...');
                 await this.handleAutoReply(message);
                 
