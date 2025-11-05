@@ -319,29 +319,23 @@ class WhatsAppBot {
         const currentTime = config.getCurrentTime().format('DD.MM.YYYY HH:mm');
         const status = config.getWorkStatus();
         
-        const info = `👨‍💻 *${config.ownerName}*\\n\\n` +
-                    `💼 *Vəzifə:* ${config.ownerPosition}\\n` +
-                    `🏢 *Şirkət:* ${config.companyName}\\n` +
-                    `� *Şəxsi Email:* ${config.personalEmail}\\n` +
-                    `💼 *İş Email:* ${config.workEmail}\\n` +
-                    `�📱 *Telefon:* ${config.ownerPhone}\\n` +
-                    `🏙️ *Şəhər:* ${config.city}\\n` +
-                    `⏰ *İndiki vaxt:* ${currentTime}\\n` +
-                    `📊 *Status:* ${status === 'working' ? '💼 İşdə' : status === 'lunch' ? '🍽️ Nahar' : '🌙 İş saatı bitib'}\\n\\n` +
-                    `🕐 *İş saatları:* ${config.workStart}-${config.workEnd}\\n` +
-                    `🥪 *Nahar:* ${config.lunchStart}-${config.lunchEnd}\\n` +
-                    `📅 *İş günləri:* B.e - Cümə\\n\\n` +
-                    `💻 *İxtisaslar:*\\n` +
-                    `• Software Development\\n` +
-                    `• WhatsApp Bot Development\\n` +
-                    `• Web Applications\\n` +
-                    `• Database Management\\n\\n` +
-                    `🌐 *Sosial Media:*\\n` +
-                    `• Telegram: ${config.telegramProfile}\\n` +
-                    `• Instagram: ${config.instagramProfile}\\n` +
-                    `• LinkedIn: ${config.linkedinProfile}\\n` +
-                    `• GitHub: ${config.githubProfile}\\n\\n` +
-                    `📞 Əlaqə üçün: !contact`;
+        const info = `👨‍💻 *${config.ownerName}*\n\n` +
+                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                    `💼 *VƏZİFƏ:* ${config.ownerPosition}\n` +
+                    `🏢 *ŞİRKƏT:* ${config.companyName}\n` +
+                    `🏙️ *ŞƏHƏr:* ${config.city}\n` +
+                    `⏰ *İNDİKİ VAXT:* ${currentTime}\n\n` +
+                    `📊 *STATUS:* ${status === 'working' ? '💼 İşdə' : status === 'lunch' ? '🍽️ Nahar fasiləsi' : '🌙 İş saatı bitib'}\n` +
+                    `🕐 *İş SAATLARI:* ${config.workStart}-${config.workEnd}\n` +
+                    `📅 *İş GÜNLƏRİ:* Bazar ertəsi - Cümə\n\n` +
+                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                    `💻 *İXTİSASLAR*\n` +
+                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                    `• Software Development\n` +
+                    `• WhatsApp Bot Development\n` +
+                    `• Web Applications\n` +
+                    `• Database Management\n\n` +
+                    `💬 Ətraflı məlumat: 2 → Əlaqə`;
         
         await this.sendMessage(chatId, info);
     }
@@ -424,28 +418,28 @@ class WhatsAppBot {
         const currentTime = config.getCurrentTime().format('HH:mm');
         const status = config.getWorkStatus();
         
-        const contactText = `📞 *Əlaqə Məlumatları*\\n\\n` +
-                           `👨‍💻 *${config.ownerName}*\\n` +
-                           `💼 *${config.ownerPosition}*\\n` +
-                           `🏢 *${config.companyName}*\\n\\n` +
-                           `📱 *WhatsApp:* ${config.ownerPhone}\\n` +
-                           `☎️ *Telefon:* ${config.ownerPhone}\\n` +
-                           `📧 *Şəxsi Email:* ${config.personalEmail}\\n` +
-                           `💼 *İş Email:* ${config.workEmail}\\n` +
-                           `🏙️ *Şəhər:* ${config.city}\\n\\n` +
-                           `⏰ *İndiki vaxt:* ${currentTime}\\n` +
-                           `📊 *Status:* ${status === 'working' ? '💼 İş saatı' : status === 'lunch' ? '🍽️ Nahar' : '🌙 İş saatı bitib'}\\n\\n` +
-                           `🕐 *İş saatları:* ${config.workStart}-${config.workEnd}\\n\\n` +
-                           `🌐 *Sosial Media:*\\n` +
-                           `📱 Telegram: ${config.telegramProfile}\\n` +
-                           `📘 Facebook: ${config.facebookProfile}\\n` +
-                           `📸 Instagram: ${config.instagramProfile}\\n` +
-                           `💼 LinkedIn: ${config.linkedinProfile}\\n` +
-                           `💻 GitHub: ${config.githubProfile}\\n\\n` +
-                           `🤖 *İş botu:* ${config.telegramBot}\\n` +
-                           `🔢 *Daxili IP:* ${config.internalIP}\\n\\n` +
-                           `🚨 *Təcili hal:* "təcili" yazın\\n` +
-                           `🤝 *Randevu:* !randevu`;
+        const contactText = `📞 *ƏLAQƏ MƏLUMAT LAri*\n\n` +
+                           `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                           `👨‍💻 *${config.ownerName}*\n` +
+                           `💼 *${config.ownerPosition}*\n` +
+                           `⏰ *İndiki vaxt:* ${currentTime}\n` +
+                           `� *Status:* ${status === 'working' ? '💼 İş saatı' : status === 'lunch' ? '🍽️ Nahar fasiləsi' : '🌙 İş saatı bitib'}\n\n` +
+                           `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                           `� *ƏLAQƏ*\n` +
+                           `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                           `📞 WhatsApp: ${config.ownerPhone}\n` +
+                           `📧 Şəxsi: ${config.personalEmail}\n` +
+                           `� İş: ${config.workEmail}\n` +
+                           `🕐 İş saatları: ${config.workStart}-${config.workEnd}\n\n` +
+                           `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                           `🌐 *SOSİAL MEDIA*\n` +
+                           `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                           `� Telegram: ${config.telegramProfile}\n` +
+                           `📸 Instagram: ${config.instagramProfile}\n` +
+                           `💼 LinkedIn: ${config.linkedinProfile}\n` +
+                           `💻 GitHub: ${config.githubProfile}\n\n` +
+                           `🚨 *Təcili hal:* "təcili" yazın\n` +
+                           `🤝 *Randevu:* !randevu yazın`;
         
         await this.sendMessage(chatId, contactText);
     }
@@ -501,13 +495,19 @@ class WhatsAppBot {
         const statusMessage = config.getStatusMessage();
         const currentTime = config.getCurrentTime().format('DD.MM.YYYY HH:mm');
         
-        const statusText = `📊 *İş Statusu*\\n\\n` +
-                          `⏰ *İndiki vaxt:* ${currentTime}\\n` +
-                          `📍 *Status:* ${statusMessage}\\n\\n` +
-                          `🕐 *İş saatları:* ${config.workStart}-${config.workEnd}\\n` +
-                          `🥪 *Nahar:* ${config.lunchStart}-${config.lunchEnd}\\n` +
-                          `📅 *Həftə sonu:* ${config.weekendDays.join(', ')}\\n\\n` +
-                          `💡 *Qeyd:* İş saatları Bakı vaxtı ilə göstərilir`;
+        const statusText = `📊 *İŞ STATUSU*\n\n` +
+                          `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                          `⏰ *İndiki vaxt:* ${currentTime}\n` +
+                          `📍 *Status:* ${statusMessage}\n\n` +
+                          `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                          `🕐 *İŞ SAATLARI*\n` +
+                          `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                          `⏰ İş saatı: ${config.workStart} - ${config.workEnd}\n` +
+                          `🍽️ Nahar: ${config.lunchStart} - ${config.lunchEnd}\n` +
+                          `📅 İş günləri: Bazar ertəsi - Cümə\n` +
+                          `🏖️ Həftə sonu: ${config.weekendDays.join(', ')}\n\n` +
+                          `🌍 *Vaxt zonası:* Bakı vaxtı (UTC+4)\n` +
+                          `🚨 *Təcili hal:* "təcili" yazın`;
         
         await this.sendMessage(chatId, statusText);
     }
@@ -533,44 +533,59 @@ class WhatsAppBot {
     }
 
     async sendProjectsMessage(chatId) {
-        const projectsText = `💻 *Layihələrim*\\n\\n` +
-                            `🤖 *WhatsApp Bot Development:*\\n` +
-                            `• Personal Assistant Bot\\n` +
-                            `• Business Automation\\n` +
-                            `• Customer Service Bots\\n\\n` +
-                            `🌐 *Web Applications:*\\n` +
-                            `• E-commerce Sites\\n` +
-                            `• Management Systems\\n` +
-                            `• API Development\\n\\n` +
-                            `💾 *Database Projects:*\\n` +
-                            `• Data Management\\n` +
-                            `• Analytics Systems\\n` +
-                            `• Migration Services\\n\\n` +
-                            `📊 *İstatistika:* 50+ layihə tamamlanıb\\n` +
-                            `📞 Ətraflı məlumat: !contact`;
+        const projectsText = `💻 *LAYİHƏLƏRİM*\n\n` +
+                            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                            `🤖 *WHATSAPP BOT DEVELOPMENT*\n` +
+                            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                            `• Şəxsi Assistant Botları\n` +
+                            `• Biznes Avtomatlaşdırma\n` +
+                            `• Müştəri Xidməti Botları\n` +
+                            `• E-ticarət Botları\n\n` +
+                            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                            `🌐 *WEB APPLICATIONS*\n` +
+                            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                            `• İdarəetmə Sistemləri\n` +
+                            `• API Development\n` +
+                            `• Database İdarəsi\n` +
+                            `• Web Portalları\n\n` +
+                            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                            `📊 *STATİSTİKA*\n` +
+                            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                            `✅ 50+ uğurlu layihə\n` +
+                            `🤖 20+ bot development\n` +
+                            `� 100% müştəri məmnuniyyəti\n\n` +
+                            `� Ətraflı: 2 → Əlaqə məlumatları`;
         
         await this.sendMessage(chatId, projectsText);
     }
 
     async sendResumeMessage(chatId) {
-        const resumeText = `📄 *CV və Portfolio*\\n\\n` +
-                          `👨‍💻 *${config.ownerName}*\\n` +
-                          `💼 *${config.ownerPosition}*\\n\\n` +
-                          `🎓 *Təhsil & Təcrübə:*\\n` +
-                          `• Software Development (3+ il)\\n` +
-                          `• Bot Development\\n` +
-                          `• Database Management\\n` +
-                          `• Web Applications\\n\\n` +
-                          `💻 *Texnologiyalar:*\\n` +
-                          `• JavaScript/Node.js\\n` +
-                          `• Python\\n` +
-                          `• WhatsApp API\\n` +
-                          `• SQL/NoSQL\\n\\n` +
-                          `📊 *Nailiyyətlər:*\\n` +
-                          `• 50+ uğurlu layihə\\n` +
-                          `• 20+ bot development\\n` +
-                          `• 100% müştəri məmnuniyyəti\\n\\n` +
-                          `📧 *Portfolio sorğusu:* ${config.ownerPhone}`;
+        const resumeText = `📄 *CV VƏ PORTFOLIO*\n\n` +
+                          `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                          `👨‍💻 *${config.ownerName}*\n` +
+                          `💼 *${config.ownerPosition}*\n` +
+                          `🏢 *${config.companyName}*\n\n` +
+                          `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                          `🎓 *TƏCRÜBƏ*\n` +
+                          `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                          `• Software Development (3+ il)\n` +
+                          `• WhatsApp Bot Development\n` +
+                          `• Database Management\n` +
+                          `• Web Applications\n\n` +
+                          `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                          `💻 *TEXNOLOGİYALAR*\n` +
+                          `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                          `• JavaScript/Node.js\n` +
+                          `• Python\n` +
+                          `• WhatsApp API\n` +
+                          `• SQL/NoSQL\n\n` +
+                          `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                          `🏆 *NAİLİYYƏTLƏR*\n` +
+                          `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                          `✅ 50+ tamamlanmış layihə\n` +
+                          `🤖 20+ bot development\n` +
+                          `⭐ 100% müştəri məmnuniyyəti\n\n` +
+                          `📧 Portfolio sorğusu: 2 → Əlaqə`;
         
         await this.sendMessage(chatId, resumeText);
     }

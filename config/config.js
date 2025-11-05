@@ -79,32 +79,32 @@ const config = {
         'menu': '📱 Əsas menyu üçün !menu yazın',
         'keyboard': '🎯 İnteraktiv menyu üçün !menu yazın',
         
-        // Friendly responses (professional tone)
-        'necəsən': 'Yaxşıyam, təşəkkür edirəm. Sizin işlər necədir?',
-        'nə var nə yox': 'Hər şey qaydasındadır. Hal-hazırda layihələrlə məşğulam.',
-        'nə edirsən': 'İş üzərində çalışıram.',
-        'darıxmışam': 'Təşəkkür edirəm. Tezliklə əlaqə saxlayarıq.',
-        'sabahın xeyir': 'Sabahınız xeyir olsun!',
-        'axşamın xeyir': 'Axşamınız xeyir olsun!',
-        'gecən xeyir': 'Gecəniz xeyir olsun!',
+        // Friendly responses (professional but warm)
+        'necəsən': '😊 Yaxşıyam, işlərlə məşğulam. Sən necəsən?',
+        'nə var nə yox': '💻 Layihələrlə məşğulam, hamısı qaydasında. Sən nə edirsən?',
+        'nə edirsən': '⌨️ Kod yazıram, botlarla oynayıram. Normal həyat 😄',
+        'darıxmışam': '😢 Hə bəzən darıxırıq. Tez görüşürük inşallah!',
+        'sabahın xeyir': '🌅 Sabahın xeyir! Gözəl gün olsun!',
+        'axşamın xeyir': '🌆 Axşamın xeyir! Necə keçdi günün?',
+        'gecən xeyir': '🌙 Gecən xeyir! Rahat yat!',
         
         // Tech & Social Media
-        'bot': 'Bot development ilə məşğulam. Telegram botum: https://t.me/Sosial_Zone_Robot',
-        'telegram': 'Telegram botum: https://t.me/Sosial_Zone_Robot',
-        'sosial': 'Sosial kanal: https://t.me/Sosial_Zone_Robot',
-        'whatsapp': 'WhatsApp bot development.',
+        'bot': '🤖 Bot yazıram, əylənirəm. Telegram botum var: https://t.me/Sosial_Zone_Robot',
+        'telegram': '📱 Telegramda aktiv oluram: https://t.me/Sosial_Zone_Robot',
+        'sosial': '🌐 Sosial kanala bax: https://t.me/Sosial_Zone_Robot',
+        'whatsapp': '📲 WhatsApp botları yazıram. Bu da onlardan biri!',
         
-        // Weekend & Off-hours responses
-        'həftə sonu': 'Həftə sonunda da layihələrlə məşğulam.',
-        'boş vaxt': 'Layihələrim üzərində işləyirəm.',
+        // Weekend & Off-hours responses  
+        'həftə sonu': '🏖️ Həftə sonunda da işləyirəm bəzən. Workaholic-əm 😅',
+        'boş vaxt': '⌨️ Boş vaxtım çox az olur, hep kodla oynayıram.',
         
-        // Birthday & Name day responses (thank you instead of congratulations)
-        'doğum günü': 'Təşəkkür edirəm! Xoş sözləriniz üçün minnətdaram.',
-        'doğum gününüz': 'Təşəkkür edirəm! Xoş sözləriniz üçün minnətdaram.',
-        'ad günü': 'Təşəkkür edirəm! Diqqətiniz üçün minnətdaram.',
-        'ad gününüz': 'Təşəkkür edirəm! Diqqətiniz üçün minnətdaram.',
-        'təbrik': 'Təşəkkür edirəm! Dəstəyiniz üçün minnətdaram.',
-        'təbrik edirəm': 'Təşəkkür edirəm! Xoş sözləriniz üçün minnətdaram.',
+        // Birthday & Name day responses (proper celebration responses)
+        'doğum günü': '🎉 Təşəkkür edirəm! Çox xoş oldu yazdığın üçün!',
+        'doğum gününüz': '🎂 Sağ ol! Bu gözəl diqqətinə görə minnətdaram!',
+        'ad günü': '🎈 Təşəkkür edirəm! Yadında saxladığın üçün çox sevinirəm!',
+        'ad gününüz': '🌟 Sağ ol! Bu xoş sözlər çox xoşuma gəldi!',
+        'təbrik': '💫 Çox sağ ol! Dəstəyin həmişə qiymətlidir!',
+        'təbrik edirəm': '🙏 Təşəkkür edirəm! Belə dostların olması çox gözəldir!',
         
         // Holiday responses
         'bayram': 'Təşəkkür edirəm! Sizin də bayramınız mübarək olsun!',
