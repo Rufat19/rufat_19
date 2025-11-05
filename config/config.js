@@ -237,16 +237,8 @@ const config = {
         // Günün müxtəlif vaxtlarında hal-əhval
         checkIns: [
             {
-                time: '15:00',
-                message: 'Salam! Necəsiniz? Uşaqlar necədir? ☺️'
-            },
-            {
                 time: '12:30',
                 message: 'Nahar vaxtı! Necə keçir gün? 🍽️'
-            },
-            {
-                time: '10:00',
-                message: 'Səhər! İşə başladım. Evdə hər şey qaydasındadır? 🏠'
             }
         ]
     },
@@ -262,33 +254,13 @@ const config = {
     },
 
     getCheckInMessage(time) {
-        const hour = parseInt(time.split(':')[0]);
-        
-        if (hour >= 9 && hour < 12) {
-            const messages = [
-                'Səhər! İşə başladım. Evdə hər şey yaxşıdır? 🌅',
-                'Sabahın xeyir! Necə oyanısınız? Uşaqlar yaxşıdır? ☀️'
-            ];
-            return messages[Math.floor(Math.random() * messages.length)];
-        }
-        
-        if (hour >= 12 && hour < 14) {
-            const messages = [
-                'Nahar vaxtı! Necə keçir gün? Yemək yedinizmi? 🍽️',
-                'Günorta! Evdə hər şey qaydasındadır? 🏠'
-            ];
-            return messages[Math.floor(Math.random() * messages.length)];
-        }
-        
-        if (hour >= 15 && hour < 17) {
-            const messages = [
-                'Necəsiniz? Uşaqlar necədir? Gün necə keçir? ☺️',
-                'İş günü sonuna doğru... Evdə hal necədir? 🏡'
-            ];
-            return messages[Math.floor(Math.random() * messages.length)];
-        }
-        
-        return 'Necəsiniz? Hər şey yaxşıdır? ☺️';
+        // Yalnız nahar vaxtı mesajları
+        const messages = [
+            'Nahar vaxtı! Necə keçir gün? Yemək yedinizmi? 🍽️',
+            'Günorta! Evdə hər şey qaydasındadır? 🏠',
+            'Nahar fasiləsi! Necəsiniz? Uşaqlar yaxşıdır? ☺️'
+        ];
+        return messages[Math.floor(Math.random() * messages.length)];
     }
 };
 
