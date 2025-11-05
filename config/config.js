@@ -51,7 +51,8 @@ const config = {
     githubProfile: process.env.GITHUB_PROFILE || 'https://github.com/Rufat19',
     
     // Business Info
-    telegramBot: process.env.TELEGRAM_BOT || '@Sosial_Zone_Robot',
+    telegramBot: process.env.TELEGRAM_BOT || 'https://t.me/Sosial_Zone_Robot',
+    telegramBotUsername: process.env.TELEGRAM_BOT_USERNAME || '@Sosial_Zone_Robot',
     internalIP: process.env.INTERNAL_IP || '4925',
     personalBio: process.env.PERSONAL_BIO || 'Software Developer & Bot Creator',
     hobbies: process.env.HOBBIES || 'Coding, Tech, AI Development',
@@ -85,8 +86,8 @@ const config = {
         'gecən xeyir': 'Gecəniz xeyir olsun!',
         
         // Tech & Social Media
-        'bot': 'Bot development ilə məşğulam. @Sosial_Zone_Robot layihəm var.',
-        'telegram': 'Telegram botum: @Sosial_Zone_Robot',
+        'bot': 'Bot development ilə məşğulam. Telegram botum: https://t.me/Sosial_Zone_Robot',
+        'telegram': 'Telegram botum: https://t.me/Sosial_Zone_Robot',
         'sosial': 'Sosial kanal: https://t.me/Sosial_Zone_Robot',
         'whatsapp': 'WhatsApp bot development.',
         
@@ -250,7 +251,8 @@ const config = {
             'İş bitdi! Yolda nəsə almaq lazımdır? Yazın məlumat 📝',
             'Evə gəlirəm. Lazım olan şey varmı? 🏠'
         ];
-        return messages[Math.floor(Math.random() * messages.length)];
+        const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
+        return selectedMessage + '\n\n🤖 _Bu mesaj avtomatik göndərilib_';
     },
 
     getCheckInMessage(time) {
@@ -260,7 +262,8 @@ const config = {
             'Günorta! Evdə hər şey qaydasındadır? 🏠',
             'Nahar fasiləsi! Necəsiniz? Uşaqlar yaxşıdır? ☺️'
         ];
-        return messages[Math.floor(Math.random() * messages.length)];
+        const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
+        return selectedMessage + '\n\n🤖 _Bu mesaj avtomatik göndərilib_\n📱 _İş vaxtı zaman ayıra bilmirəm, tezliklə geri dönüş edəcəm_';
     }
 };
 
