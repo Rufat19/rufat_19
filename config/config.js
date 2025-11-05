@@ -25,14 +25,19 @@ const config = {
     enableProfessionalMode: process.env.ENABLE_PROFESSIONAL_MODE !== 'false',
     enableGroupChat: process.env.ENABLE_GROUP_CHAT === 'true',
     
-    // Personal Info
-    ownerPhone: process.env.OWNER_PHONE || '+994773632066',
+    // Personal Settings
+    ownerPhone: process.env.OWNER_PHONE || '994773632066',
+    spousePhone: process.env.SPOUSE_PHONE || '994556919601', // Həyat yoldaşının nömrəsi
     timezone: process.env.TIMEZONE || 'Asia/Baku',
     workStart: process.env.WORK_START || '09:00',
     workEnd: process.env.WORK_END || '18:00',
     lunchStart: process.env.LUNCH_START || '13:00',
     lunchEnd: process.env.LUNCH_END || '14:00',
     weekendDays: (process.env.WEEKEND_DAYS || 'Saturday,Sunday').split(','),
+    
+    // Avtomatik Mesaj Konfiqurasiyası
+    enableAutoMessages: process.env.ENABLE_AUTO_MESSAGES !== 'false',
+    enableCheckIns: process.env.ENABLE_CHECKINS !== 'false',
     
     // Email Addresses
     personalEmail: process.env.PERSONAL_EMAIL || 'babayev.rufat.official@gmail.com',
@@ -219,6 +224,71 @@ const config = {
             default:
                 return '📱 Status yoxlanılır...';
         }
+    },
+
+    // Avtomatik Mesajlar Konfiqurasiyası
+    autoMessages: {
+        // İşdən çıxarkən (18:00 civarı)
+        eveningMessage: {
+            time: '18:05', // İş bitkən 5 dəqiqə sonra
+            message: 'Salam! İşdən çıxıram. Gəlirəm, nəsə almaq lazımdır? 🛒'
+        },
+        
+        // Günün müxtəlif vaxtlarında hal-əhval
+        checkIns: [
+            {
+                time: '15:00',
+                message: 'Salam! Necəsiniz? Uşaqlar necədir? ☺️'
+            },
+            {
+                time: '12:30',
+                message: 'Nahar vaxtı! Necə keçir gün? 🍽️'
+            },
+            {
+                time: '10:00',
+                message: 'Səhər! İşə başladım. Evdə hər şey qaydasındadır? 🏠'
+            }
+        ]
+    },
+
+    // Avtomatik mesaj funksiyaları
+    getEveningMessage() {
+        const messages = [
+            'Salam! İşdən çıxıram. Gəlirəm, nəsə almaq lazımdır? 🛒',
+            'İş bitdi! Yolda nəsə almaq lazımdır? Yazın məlumat 📝',
+            'Evə gəlirəm. Lazım olan şey varmı? 🏠'
+        ];
+        return messages[Math.floor(Math.random() * messages.length)];
+    },
+
+    getCheckInMessage(time) {
+        const hour = parseInt(time.split(':')[0]);
+        
+        if (hour >= 9 && hour < 12) {
+            const messages = [
+                'Səhər! İşə başladım. Evdə hər şey yaxşıdır? 🌅',
+                'Sabahın xeyir! Necə oyanısınız? Uşaqlar yaxşıdır? ☀️'
+            ];
+            return messages[Math.floor(Math.random() * messages.length)];
+        }
+        
+        if (hour >= 12 && hour < 14) {
+            const messages = [
+                'Nahar vaxtı! Necə keçir gün? Yemək yedinizmi? 🍽️',
+                'Günorta! Evdə hər şey qaydasındadır? 🏠'
+            ];
+            return messages[Math.floor(Math.random() * messages.length)];
+        }
+        
+        if (hour >= 15 && hour < 17) {
+            const messages = [
+                'Necəsiniz? Uşaqlar necədir? Gün necə keçir? ☺️',
+                'İş günü sonuna doğru... Evdə hal necədir? 🏡'
+            ];
+            return messages[Math.floor(Math.random() * messages.length)];
+        }
+        
+        return 'Necəsiniz? Hər şey yaxşıdır? ☺️';
     }
 };
 

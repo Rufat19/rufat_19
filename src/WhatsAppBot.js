@@ -24,7 +24,9 @@ class WhatsAppBot {
         });
         
         this.isReady = false;
+        this.autoMessageScheduler = null;
         this.setupEventListeners();
+        this.setupAutoMessages();
     }
     
     setupEventListeners() {
@@ -43,6 +45,12 @@ class WhatsAppBot {
             console.log(`📱 Bot adı: ${config.botName}`);
             console.log(`🔧 Session: ${config.sessionName}`);
             this.isReady = true;
+            
+            // Avtomatik mesajları başlat
+            if (config.enableAutoMessages) {
+                this.startAutoMessages();
+                console.log('🤖 Avtomatik mesaj sistemi aktivləşdi');
+            }
         });
         
         // Mesaj alındıqda
@@ -679,6 +687,51 @@ class WhatsAppBot {
         }
     }
     
+    // Avtomatik mesaj sistemi
+    setupAutoMessages() {
+        // Hər dəqiqə yoxla
+        setInterval(() => {
+            if (this.isReady && config.enableAutoMessages) {
+                this.checkAutoMessages();
+            }
+        }, 60000); // 1 dəqiqə
+    }
+
+    async checkAutoMessages() {
+        const now = config.getCurrentTime();
+        const currentTime = now.format('HH:mm');
+        const spouseId = `${config.spousePhone}@c.us`;
+        
+        try {
+            // Axşam mesajı (işdən çıxarkən)
+            if (currentTime === config.autoMessages.eveningMessage.time) {
+                const message = config.getEveningMessage();
+                await this.sendMessage(spouseId, message);
+                console.log(`📤 Axşam mesajı göndərildi: ${currentTime}`);
+            }
+            
+            // Hal-əhval mesajları
+            for (const checkIn of config.autoMessages.checkIns) {
+                if (currentTime === checkIn.time) {
+                    const message = config.getCheckInMessage(checkIn.time);
+                    await this.sendMessage(spouseId, message);
+                    console.log(`📤 Hal-əhval mesajı göndərildi: ${currentTime}`);
+                }
+            }
+            
+        } catch (error) {
+            console.error('❌ Avtomatik mesaj xətası:', error);
+        }
+    }
+
+    async startAutoMessages() {
+        console.log('🕐 Avtomatik mesaj vaxtları:');
+        console.log(`   Axşam mesajı: ${config.autoMessages.eveningMessage.time}`);
+        config.autoMessages.checkIns.forEach(checkIn => {
+            console.log(`   Hal-əhval: ${checkIn.time}`);
+        });
+    }
+
     async start() {
         try {
             console.log('🚀 WhatsApp Bot başladılır...');
