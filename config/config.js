@@ -57,8 +57,8 @@ const config = {
     
     // Auto replies for handmade bag business
     autoReplies: {
-        'salam': '👋 Salam! Bu *Rüfət Babayev*in şəxsi assistentidir.\n💼 Hal-hazırda iş saatlarındayam (09:00-18:00)\n📱 Kömək üçün !help yazın',
-        'hello': '👋 Hello! This is *Rüfət Babayev*\'s personal assistant.\n💼 Currently in working hours (09:00-18:00)\n� Type !help for assistance',
+        'salam': 'Salam! Rüfət Babayev-in şəxsi assistenti.\nİş saatları: 09:00-18:00\nKömək: !help',
+        'hello': 'Hello! Rüfət Babayev\'s personal assistant.\nWorking hours: 09:00-18:00\nHelp: !help',
         'işdə': '💼 Hal-hazırda işdəyəm. Cavab gecikə bilər.\n⏰ İş saatları: 09:00-18:00\n📞 Təcili hallarda zəng edin',
         'working': '💼 Currently at work. Response might be delayed.\n⏰ Working hours: 09:00-18:00\n� Call for urgent matters',
         'görüşmək': '🤝 Görüşmək üçün !randevu yazın\n📅 İş saatları: 09:00-18:00',
@@ -70,49 +70,49 @@ const config = {
         'menu': '📱 Əsas menyu üçün !menu yazın',
         'keyboard': '🎯 İnteraktiv menyu üçün !menu yazın',
         
-        // Friendly & Social (24/7)
-        'necəsən': '😊 Yaxşıyam, sağ ol! Sən necəsən? İşlər necədir?',
-        'nə var nə yox': '😄 Hər şey yaxşıdır! Kodla məşğulam, yeni botlar düzəldirəm',
-        'nə edirsən': '💻 Kompüterdə oturub kod yazıram, həmişəki kimi! 😅',
-        'darıxmışam': '🤗 Mən də səni darıxmışam! Görüşək tezliklə',
-        'sabahın xeyir': '🌅 Sabahın xeyir! Gözəl bir gün olsun! ☀️',
-        'axşamın xeyir': '🌆 Axşamın xeyir! Necə keçdi gün? 🌙',
-        'gecən xeyir': '🌙 Gecən xeyir! Yatmağa vaxtıdır 😴',
+        // Friendly responses (professional tone)
+        'necəsən': 'Yaxşıyam, təşəkkür edirəm. Sizin işlər necədir?',
+        'nə var nə yox': 'Hər şey qaydasındadır. Hal-hazırda layihələrlə məşğulam.',
+        'nə edirsən': 'İş üzərində çalışıram.',
+        'darıxmışam': 'Təşəkkür edirəm. Tezliklə əlaqə saxlayarıq.',
+        'sabahın xeyir': 'Sabahınız xeyir olsun!',
+        'axşamın xeyir': 'Axşamınız xeyir olsun!',
+        'gecən xeyir': 'Gecəniz xeyir olsun!',
         
         // Tech & Social Media
-        'bot': '🤖 Bot dünyasından danışaq! @Sosial_Zone_Robot da düzəltmişəm',
-        'telegram': '📱 Telegram botum: @Sosial_Zone_Robot - yoxla, bəyənəcəksən!',
-        'sosial': '📢 Sosial kanalım: https://t.me/Sosial_Zone_Robot',
-        'whatsapp': '💬 WhatsApp bot düzəldirəm, gördüyün kimi! 😄',
+        'bot': 'Bot development ilə məşğulam. @Sosial_Zone_Robot layihəm var.',
+        'telegram': 'Telegram botum: @Sosial_Zone_Robot',
+        'sosial': 'Sosial kanal: https://t.me/Sosial_Zone_Robot',
+        'whatsapp': 'WhatsApp bot development.',
         
         // Weekend & Off-hours responses
-        'həftə sonu': '🎮 Həftə sonunda rahatlıq, film, oyun... Sən nə edirsən?',
-        'boş vaxt': '🎯 Boş vaxtımda yenə kod yazıram! 😅 Hobbim həm də işimdir',
+        'həftə sonu': 'Həftə sonunda da layihələrlə məşğulam.',
+        'boş vaxt': 'Layihələrim üzərində işləyirəm.',
         
-        // Təbriklər və Bayramlaşmalar
-        'doğum günü': '🎂🎉 Doğum günün mübarək! Səadətli, sağlam və uğurlu bir yaş keçir! 🥳✨\nAllah səni hər zaman qoruyub saxlasın! 🤲💝',
-        'doğum gününüz': '🎂🎉 Doğum gününüz mübarək! Səadətli, sağlam və uğurlu bir yaş keçirsiniz! 🥳✨\nAllah sizi hər zaman qoruyub saxlasın! 🤲💝',
-        'ad günü': '🎊 Ad günün mübarək olsun! 🌟 Bu gün sənin günündür! 🎈\nİstəklərin, arzularınla dolu bir gün keçir! 💫🎁',
-        'ad gününüz': '🎊 Ad gününüz mübarək olsun! 🌟 Bu gün sizin gününüzdür! 🎈\nİstəkləriniz, arzularınızla dolu bir gün keçirin! 💫🎁',
-        'təbrik': '🎉 Təbriklər! 👏 Bu uğur tamamilə sənin layiqindir! 🌟\nDaha çox uğurlara nail olmağın üçün! 🚀✨',
-        'təbrik edirəm': '🎊 Çox təbriklər! 🎯 Bu nailiyyət çox gözəldir! 💪\nDaha böyük uğurların olsun! 🏆🌟',
+        // Birthday & Name day responses (thank you instead of congratulations)
+        'doğum günü': 'Təşəkkür edirəm! Xoş sözləriniz üçün minnətdaram.',
+        'doğum gününüz': 'Təşəkkür edirəm! Xoş sözləriniz üçün minnətdaram.',
+        'ad günü': 'Təşəkkür edirəm! Diqqətiniz üçün minnətdaram.',
+        'ad gününüz': 'Təşəkkür edirəm! Diqqətiniz üçün minnətdaram.',
+        'təbrik': 'Təşəkkür edirəm! Dəstəyiniz üçün minnətdaram.',
+        'təbrik edirəm': 'Təşəkkür edirəm! Xoş sözləriniz üçün minnətdaram.',
         
-        // Bayramlar
-        'bayram': '🌙✨ Bayramınız mübarək olsun! 🎊\nAilələ, dostlarla gözəl vaxtlar keçirin! 💕🏡',
-        'bayramınız mübarək': '🌙🎉 Bayramınız mübarək olsun! Səadətli, xoşbəxt günlər! ✨\nAllah bu günləri hər il nasib etsin! 🤲💫',
-        'ramazan': '🌙 Ramazan ayınız mübarək! 🤲 Müqəddes bu ayda mənəvi təmizlik! ✨\nOrucunuz qəbul olsun! 🕌💝',
-        'qurban bayramı': '🐑🌙 Qurban Bayramınız mübarək olsun! 🎊\nAllahın rəhməti və bərəkəti ailələrinizə! 🤲✨',
-        'ramazan bayramı': '🌙🎉 Ramazan Bayramınız mübarək! Xoş günlər! ✨\nAilələrlə, yaxınlarınızla gözəl vaxtlar! 💕🏡',
+        // Holiday responses
+        'bayram': 'Təşəkkür edirəm! Bayramınız da mübarək olsun!',
+        'bayramınız mübarək': 'Təşəkkür edirəm! Bayramınız da mübarək olsun!',
+        'ramazan': 'Təşəkkür edirəm! Ramazan ayınız mübarək!',
+        'qurban bayramı': 'Təşəkkür edirəm! Bayramınız mübarək olsun!',
+        'ramazan bayramı': 'Təşəkkür edirəm! Bayramınız mübarək olsun!',
         
-        // Yeni il
-        'yeni il': '🎊🥳 Yeni İliniz mübarək olsun! 2️⃣0️⃣2️⃣6️⃣ ✨\nSəadət, sağlamlıq və uğurlarla dolu bir il olsun! 🌟🎁',
-        'yeni iliniz': '🎉🍾 Yeni İliniz mübarək! Arzularınız həqiqətləşsin! ✨\nBu il sizə xoşbəxtlik gətirsin! 🌈💫',
+        // New Year and special occasions
+        'yeni il': 'Təşəkkür edirəm! Yeni iliniz mübarək olsun!',
+        'yeni iliniz': 'Təşəkkür edirəm! Yeni iliniz mübarək olsun!',
         
-        // Xüsusi günlər
-        'evlilik': '💍💒 Evliliyiniz mübarək olsun! 💕 Xoşbəxt bir həyat keçirin!\nBirlikdə bütün çətinlikləri aşın! 👰🤵✨',
-        'nişan': '💍✨ Nişanınız mübarək! Xoşbəxt günlərin başlanğıcı! 💕\nGələcək üçün ən gözəl arzu və istəklər! 🌟💫',
-        'məzuniyyət': '🎓🎉 Məzuniyyətin mübarək! Təhsilin başa çatdı! 📚✨\nİndi yeni sərgüzəştlər səni gözləyir! 🚀💪',
-        'iş': '💼🎯 Yeni işin mübarək olsun! Uğurlu karyera! 🌟\nBu yeni başlanğıc səni böyük nailiyyətlərə aparacaq! 🚀💪'
+        // Special occasions - gratitude responses
+        'evlilik': 'Təşəkkür edirəm! Xoş sözləriniz üçün minnətdaram.',
+        'nişan': 'Təşəkkür edirəm! Diqqətiniz üçün minnətdaram.',
+        'məzuniyyət': 'Təşəkkür edirəm! Dəstəyiniz üçün minnətdaram.',
+        'iş': 'Təşəkkür edirəm! Xoş sözləriniz üçün minnətdaram.'
     },
     
     // Personal Assistant Commands
