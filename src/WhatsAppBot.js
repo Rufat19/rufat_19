@@ -94,19 +94,24 @@ class WhatsAppBot {
             // Botun öz mesajlarını ignore et
             if (message.fromMe) return;
             
+            // Status mesajlarını ignore et (spam qarşısı)
+            if (message.from.includes('status@broadcast')) return;
+            
+            // Boş mesajları ignore et
+            if (!message.body || message.body.trim() === '') return;
+            
             const chat = await message.getChat();
             const messageBody = message.body.toLowerCase().trim();
             const isCommand = messageBody.startsWith(config.commandPrefix);
             
-            // DEBUG məlumatları (həmişə göstər)
-            console.log('🔍 DEBUG: Mesaj alındı');
-            console.log(`📨 Mesaj: "${message.body}"`);
-            console.log(`👤 Göndərən: ${message.from}`);
-            console.log(`💬 Chat növü: ${chat.isGroup ? 'Qrup' : 'Şəxsi'}`);
-            console.log(`🎯 Komanda?: ${isCommand}`);
-            console.log(`⚙️ Qrup chat aktiv: ${config.enableGroupChat}`);
-            console.log(`🤖 Auto reply aktiv: ${config.enableAutoReply}`);
-            console.log(`🔧 Commands aktiv: ${config.enableCommands}`);
+            // DEBUG məlumatları (yalnız vacib mesajlar üçün)
+            if (config.enableLogging || isCommand) {
+                console.log('🔍 DEBUG: Mesaj alındı');
+                console.log(`📨 Mesaj: "${message.body}"`);
+                console.log(`👤 Göndərən: ${message.from}`);
+                console.log(`💬 Chat növü: ${chat.isGroup ? 'Qrup' : 'Şəxsi'}`);
+                if (isCommand) console.log(`🎯 Komanda aşkarlandı: ${messageBody}`);
+            }
             
             // Komanda həmişə işlənir (qrupda və ya şəxsi söhbətdə)
             if (isCommand && config.enableCommands) {
