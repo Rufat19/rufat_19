@@ -149,6 +149,8 @@ class WhatsAppBot {
         const args = commandText.split(' ');
         const command = args[0];
         
+        console.log(`🎯 DEBUG Command: "${command}" - Text: "${commandText}" - Full: "${message.body}"`);
+        
         switch (command) {
             case 'help':
                 await this.sendHelpMessage(message.from);
@@ -193,6 +195,7 @@ class WhatsAppBot {
                 break;
                 
             case 'setgroup':
+                console.log('🎯 SetGroup komandası çağırıldı!');
                 await this.handleSetGroup(message);
                 break;
                 
@@ -688,10 +691,9 @@ class WhatsAppBot {
 
     async sendMessage(chatId, message) {
         try {
+            console.log(`📤 Mesaj göndərilməyə çalışılır: "${message}" - ${chatId}`);
             await this.client.sendMessage(chatId, message);
-            if (config.enableLogging) {
-                console.log(`📤 Mesaj göndərildi: "${message}" - ${chatId}`);
-            }
+            console.log(`✅ Mesaj uğurla göndərildi: "${message}" - ${chatId}`);
         } catch (error) {
             console.error('❌ Mesaj göndərmə xətası:', error);
         }
@@ -771,9 +773,12 @@ class WhatsAppBot {
 
     // Qrup ID təyin etmə funksiyaları
     async handleSetGroup(message) {
+        console.log('🔧 handleSetGroup funksiyası başladı');
         const chat = await message.getChat();
+        console.log(`📱 Chat info: isGroup=${chat.isGroup}, name=${chat.name}, id=${chat.id._serialized}`);
         
         if (!chat.isGroup) {
+            console.log('❌ Chat qrup deyil, xəta mesajı göndərilir');
             await this.sendMessage(message.from, '❌ Bu komanda yalnız qruplarda işləyir!');
             return;
         }
