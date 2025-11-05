@@ -703,8 +703,16 @@ class WhatsAppBot {
         const spouseId = `${config.spousePhone}@c.us`;
         
         try {
-            // Axşam mesajı (işdən çıxarkən)
-            if (currentTime === config.autoMessages.eveningMessage.time) {
+            // Cümə günü dostlarla görüş mesajı (18:15)
+            if (now.format('dddd') === 'Friday' && currentTime === config.autoMessages.fridayMeeting.time) {
+                const message = config.getFridayMessage();
+                await this.sendMessage(spouseId, message);
+                console.log(`📤 Cümə görüş mesajı göndərildi: ${currentTime}`);
+                return; // Cümə günü digər axşam mesajı göndərilməsin
+            }
+            
+            // Adi axşam mesajı (işdən çıxarkən) - Cümə günü istisna
+            if (now.format('dddd') !== 'Friday' && currentTime === config.autoMessages.eveningMessage.time) {
                 const message = config.getEveningMessage();
                 await this.sendMessage(spouseId, message);
                 console.log(`📤 Axşam mesajı göndərildi: ${currentTime}`);
@@ -726,7 +734,8 @@ class WhatsAppBot {
 
     async startAutoMessages() {
         console.log('🕐 Avtomatik mesaj vaxtları:');
-        console.log(`   Axşam mesajı: ${config.autoMessages.eveningMessage.time}`);
+        console.log(`   Axşam mesajı: ${config.autoMessages.eveningMessage.time} (B.e, Ç.a, Ç və Ş)`);
+        console.log(`   Cümə görüş: ${config.autoMessages.fridayMeeting.time} (yalnız Cümə)`);
         config.autoMessages.checkIns.forEach(checkIn => {
             console.log(`   Hal-əhval: ${checkIn.time}`);
         });

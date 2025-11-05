@@ -235,6 +235,12 @@ const config = {
             message: 'Salam! İşdən çıxıram. Gəlirəm, nəsə almaq lazımdır? 🛒'
         },
         
+        // Cümə günü dostlarla görüş
+        fridayMeeting: {
+            time: '18:15',
+            message: 'Salam! Bugün dostlarımla görüşəcəm. Vacib mənimlə bağlı nəsə işin var? 👥'
+        },
+        
         // Günün müxtəlif vaxtlarında hal-əhval
         checkIns: [
             {
@@ -250,6 +256,16 @@ const config = {
             'Salam! İşdən çıxıram. Gəlirəm, nəsə almaq lazımdır? 🛒',
             'İş bitdi! Yolda nəsə almaq lazımdır? Yazın məlumat 📝',
             'Evə gəlirəm. Lazım olan şey varmı? 🏠'
+        ];
+        const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
+        return selectedMessage + '\n\n🤖 _Bu mesaj avtomatik göndərilib_';
+    },
+
+    getFridayMessage() {
+        const messages = [
+            'Salam! Bugün dostlarımla görüşəcəm. Vacib mənimlə bağlı nəsə işin var? 👥',
+            'Bu gün dostlarla görüş günü! Mənə vacib deyəcəyin nəsə varmı? 🤝',
+            'Dostlarla çıxacam. Məndən xüsusi bir işin varmı? 👫'
         ];
         const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
         return selectedMessage + '\n\n🤖 _Bu mesaj avtomatik göndərilib_';
