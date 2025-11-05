@@ -190,6 +190,14 @@ class WhatsAppBot {
                 await this.sendMainMenuMessage(message.from);
                 break;
                 
+            case 'setgroup':
+                await this.handleSetGroup(message);
+                break;
+                
+            case 'groupinfo':
+                await this.handleGroupInfo(message);
+                break;
+                
             default:
                 await this.sendMessage(message.from, `❓ Naməlum əmr: "${command}". Kömək üçün !help yazın.`);
         }
@@ -731,6 +739,13 @@ class WhatsAppBot {
                     console.log(`📤 Hal-əhval mesajı göndərildi: ${currentTime}`);
                 }
             }
+
+            // Dostlar qrupuna mesaj (cümə axşam 19:00)
+            if (now.format('dddd') === 'Friday' && currentTime === '19:00' && config.friendsGroupId) {
+                const groupMessage = config.getFriendsGroupMessage();
+                await this.sendMessage(config.friendsGroupId, groupMessage);
+                console.log(`📤 Dostlar qrupuna mesaj göndərildi: ${currentTime}`);
+            }
             
         } catch (error) {
             console.error('❌ Avtomatik mesaj xətası:', error);
@@ -741,9 +756,59 @@ class WhatsAppBot {
         console.log('🕐 Avtomatik mesaj vaxtları:');
         console.log(`   Axşam mesajı: ${config.autoMessages.eveningMessage.time} (B.e, Ç.a, Ç və Ş)`);
         console.log(`   Cümə görüş: ${config.autoMessages.fridayMeeting.time} (yalnız Cümə)`);
+        console.log(`   Dostlar qrupu: 19:00 (yalnız Cümə) - ${config.friendsGroupName}`);
         config.autoMessages.checkIns.forEach(checkIn => {
             console.log(`   Hal-əhval: ${checkIn.time}`);
         });
+        
+        if (!config.friendsGroupId) {
+            console.log('⚠️  Dostlar qrupu ID təyin edilməyib. Qrup mesajları deaktivdir.');
+            console.log('💡 Qrup ID təyin etmək üçün qrupa "!setgroup" yazın');
+        }
+    }
+
+    // Qrup ID təyin etmə funksiyaları
+    async handleSetGroup(message) {
+        const chat = await message.getChat();
+        
+        if (!chat.isGroup) {
+            await this.sendMessage(message.from, '❌ Bu komanda yalnız qruplarda işləyir!');
+            return;
+        }
+        
+        // Qrup ID-sini config-ə təyin et (bu sadə nümunədir, real proyektdə database istifadə edin)
+        config.friendsGroupId = chat.id._serialized;
+        config.friendsGroupName = chat.name;
+        
+        await this.sendMessage(chat.id._serialized, 
+            `✅ *Dostlar qrupu təyin edildi!*\n\n` +
+            `📱 Qrup: ${chat.name}\n` +
+            `🆔 ID: ${chat.id._serialized}\n\n` +
+            `🕘 Cümə günləri saat 19:00-da avtomatik salamlaşma mesajı göndəriləcək.\n\n` +
+            `🤖 _Bu qrup indi dostlar qrupu kimi tanınır_`
+        );
+        
+        console.log(`✅ Dostlar qrupu təyin edildi: ${chat.name} (${chat.id._serialized})`);
+    }
+
+    async handleGroupInfo(message) {
+        const chat = await message.getChat();
+        
+        if (!chat.isGroup) {
+            await this.sendMessage(message.from, '❌ Bu komanda yalnız qruplarda işləyir!');
+            return;
+        }
+        
+        const isFriendsGroup = config.isFriendsGroup(chat.id._serialized);
+        
+        await this.sendMessage(chat.id._serialized,
+            `📊 *Qrup məlumatları:*\n\n` +
+            `📛 Ad: ${chat.name}\n` +
+            `🆔 ID: ${chat.id._serialized}\n` +
+            `👥 Üzv sayı: ${chat.participants.length}\n` +
+            `🤖 Dostlar qrupu: ${isFriendsGroup ? '✅ Bəli' : '❌ Xeyr'}\n\n` +
+            `${isFriendsGroup ? '🕘 Cümə 19:00-da avtomatik mesaj gələcək' : '💡 !setgroup ilə dostlar qrupu olaraq təyin edə bilərsiniz'}`
+        );
     }
 
     async start() {

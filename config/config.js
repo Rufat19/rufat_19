@@ -28,7 +28,9 @@ const config = {
     // Personal Settings
     ownerPhone: process.env.OWNER_PHONE || '994773632066',
     spousePhone: process.env.SPOUSE_PHONE || '994556919601', // Həyat yoldaşının nömrəsi
-    spouseName: process.env.SPOUSE_NAME || 'Həyat yoldaşım', // Həyat yoldaşının adı
+    spouseName: process.env.SPOUSE_NAME || 'Nərgiz', // Həyat yoldaşının adı
+    friendsGroupId: process.env.FRIENDS_GROUP_ID || '', // Dostlar qrupunun ID-si
+    friendsGroupName: process.env.FRIENDS_GROUP_NAME || 'Dostlar Qrupu', // Qrup adı
     timezone: process.env.TIMEZONE || 'Asia/Baku',
     workStart: process.env.WORK_START || '09:00',
     workEnd: process.env.WORK_END || '18:00',
@@ -281,6 +283,24 @@ const config = {
         ];
         const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
         return selectedMessage + '\n\n🤖 _Bu mesaj avtomatik göndərilib_\n📱 _İş vaxtı zaman ayıra bilmirəm, tezliklə geri dönüş edəcəm_';
+    },
+
+    // Qrup mesaj funksiyaları
+    getFriendsGroupMessage() {
+        const messages = [
+            '👋 Salam dostlar! Necəsiniz? Hər şey yaxşıdır?',
+            '😊 Nə var nə yox dostlar? İşlər necədir?',
+            '🤝 Salam qrupdakılar! Hal-əhvalınız necədir?',
+            '👥 Dostlar, salamlar! İndi təzə işdən çıxdım'
+        ];
+        const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
+        return selectedMessage + '\n\n🤖 _Bu mesaj avtomatik göndərilib_';
+    },
+
+    // Qrup ID-si yoxla
+    isFriendsGroup(chatId) {
+        if (!this.friendsGroupId) return false;
+        return chatId.includes(this.friendsGroupId);
     }
 };
 
