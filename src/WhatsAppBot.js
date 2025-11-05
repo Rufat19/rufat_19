@@ -255,6 +255,14 @@ class WhatsAppBot {
                 console.log(`   🎯 Trigger tapıldı: "${trigger}" -> Reply göndərilir`);
                 let finalReply = await this.getContextualReply(trigger, reply, workStatus);
                 await this.sendMessage(message.from, finalReply);
+                
+                // Salamlaşma triggerindən sonra help menyusunu da göndər
+                if (trigger === 'salam' || trigger === 'hello') {
+                    console.log(`   📚 Salamlaşmadan sonra kömək menyusu göndərilir...`);
+                    setTimeout(async () => {
+                        await this.sendHelpMessage(message.from);
+                    }, 2000); // 2 saniyə gecikmə
+                }
                 return;
             }
         }
