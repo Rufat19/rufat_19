@@ -303,48 +303,24 @@ class WhatsAppBot {
     async sendHelpMessage(chatId) {
         const workStatus = config.getWorkStatus();
         
-        let helpText = `🤖 *${config.botName} - Kömək Menyusu*\n\n`;
+        let helpText = `📋 *Kömək Menyusu*\n\n`;
         
-        helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-        helpText += `💼 *ƏSAS KOMANDALAR*\n`;
-        helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-        helpText += `• !info      - Şəxsi məlumatlar\n`;
-        helpText += `• !contact   - Əlaqə məlumatları\n`;
-        helpText += `• !projects  - İş layihələri\n`;
-        helpText += `• !resume    - CV və Portfolio\n`;
-        helpText += `• !status    - İş statusu\n`;
-        helpText += `• !time      - Bakı vaxtı\n`;
-        helpText += `• !help      - Bu menyu\n\n`;
+        helpText += `⚡ *Sürətli seçimlər:*\n`;
+        helpText += `• 1 - Şəxsi məlumatlar\n`;
+        helpText += `• 2 - Əlaqə məlumatları\n`;
+        helpText += `• 3 - İş layihələri\n`;
+        helpText += `• 4 - CV və Portfolio\n`;
+        helpText += `• 5 - İş statusu\n\n`;
         
-        helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-        helpText += `⚡ *SÜRƏTLİ SEÇİMLƏR*\n`;
-        helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-        helpText += `Sadəcə rəqəm yazın:\n`;
-        helpText += `• 1 → Şəxsi məlumatlar\n`;
-        helpText += `• 2 → Əlaqə məlumatları\n`;
-        helpText += `• 3 → İş layihələri\n`;
-        helpText += `• 4 → CV və Portfolio\n`;
-        helpText += `• 5 → İş statusu\n\n`;
-        
-        helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-        helpText += `💬 *AÇAR SÖZLƏR*\n`;
-        helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-        helpText += `Salamlaşma: salam, hello\n`;
-        helpText += `Hal-əhval: necəsən, nə var\n`;
-        helpText += `İş haqqında: işdə, layihə\n`;
-        helpText += `Bot: bot, telegram\n\n`;
+        helpText += `🔧 *Əsas komandalar:*\n`;
+        helpText += `• !info, !contact, !projects\n`;
+        helpText += `• !resume, !status, !time\n\n`;
         
         if (workStatus === 'working') {
-            helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-            helpText += `💼 *HAL-HAZIRDA İŞ SAATINDAYıQ*\n`;
-            helpText += `🤖 Peşəkar rejim aktiv\n`;
-            helpText += `📞 Telegram: @Sosial_Zone_Robot\n`;
+            helpText += `💼 İş saatı - Peşəkar rejim aktiv`;
         } else {
-            helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-            helpText += `🌙 *İŞ SAATI BİTİB*\n`;
-            helpText += `😊 Dostcasına söhbət edə bilərik!\n`;
+            helpText += `🌙 İş saatı bitib - Rahat söhbət`;
         }
-        helpText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
         
         await this.sendMessage(chatId, helpText);
     }
