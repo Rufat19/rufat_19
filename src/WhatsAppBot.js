@@ -350,79 +350,7 @@ class WhatsAppBot {
         await this.sendMessage(chatId, info);
     }
 
-    async sendCatalogMessage(chatId) {
-        let catalogText = `🎒 *${config.businessName} - Kataloq*\\n\\n`;
-        
-        config.products.bags.forEach((bag, index) => {
-            catalogText += `${index + 1}️⃣ *${bag.name}*\\n`;
-            catalogText += `💰 *Qiymət:* ${bag.price}\\n`;
-            catalogText += `📝 *Təsvir:* ${bag.description}\\n\\n`;
-        });
-        
-        catalogText += `═══════════════════════\\n`;
-        catalogText += `📱 *Sürətli seçim:*\\n`;
-        catalogText += `📝 Sifariş üçün: *3* yazın\\n`;
-        catalogText += `💰 Qiymətlər üçün: *2* yazın\\n`;
-        catalogText += `🏠 Əsas menyu: !menu\\n\\n`;
-        catalogText += `Və ya istədiyiniz çanta nömrəsini seçin!`;
-        
-        await this.sendMessage(chatId, catalogText);
-    }
 
-    async sendPriceListMessage(chatId) {
-        let priceText = `💰 *${config.businessName} - Qiymətlər*\\n\\n`;
-        
-        config.products.bags.forEach((bag, index) => {
-            priceText += `${index + 1}️⃣ ${bag.name}: *${bag.price}*\\n`;
-        });
-        
-        priceText += `\\n📋 *Qeydlər:*\\n`;
-        priceText += `• Qiymətlər material və dizayna görə dəyişir\\n`;
-        priceText += `• Fərdi sifarişlər üçün əlavə qiymət\\n`;
-        priceText += `• Topdan alışda endirim var\\n\\n`;
-        priceText += `📞 Dəqiq qiymət üçün: !sifaris`;
-        
-        await this.sendMessage(chatId, priceText);
-    }
-
-    async startOrderProcess(chatId) {
-        const orderText = `📝 *Sifariş Formu*\\n\\n` +
-                         `Sifariş vermək üçün aşağıdakı məlumatları göndərin:\\n\\n` +
-                         `1️⃣ *Çanta növü* (katalogdan seçin)\\n` +
-                         `2️⃣ *Rəng tercihi*\\n` +
-                         `3️⃣ *Ölçü* (böyük/orta/kiçik)\\n` +
-                         `4️⃣ *Adınız və soyadınız*\\n` +
-                         `5️⃣ *Telefon nömrəniz*\\n` +
-                         `6️⃣ *Ünvan* (çatdırılma üçün)\\n\\n` +
-                         `� *Nümunə:*\\n` +
-                         `"1. Klassik Əl Çantası\\n` +
-                         `2. Qara rəng\\n` +
-                         `3. Orta ölçü\\n` +
-                         `4. Ayşe Məmmədova\\n` +
-                         `5. 050-123-45-67\\n` +
-                         `6. Yasamal rayonu"\\n\\n` +
-                         `💬 Bu formatda yazıb göndərin!`;
-        
-        await this.sendMessage(chatId, orderText);
-    }
-
-    async sendDeliveryInfoMessage(chatId) {
-        const deliveryText = `🚚 *Çatdırılma Məlumatları*\\n\\n` +
-                            `📍 *Çatdırılma zonası:* ${config.deliveryInfo}\\n\\n` +
-                            `💰 *Çatdırılma qiymətləri:*\\n` +
-                            `• Bakı şəhəri daxili: 5 AZN\\n` +
-                            `• Abşeron rayonu: 8 AZN\\n` +
-                            `• Digər rayonlar: razılaşma ilə\\n\\n` +
-                            `⏱️ *Çatdırılma müddəti:*\\n` +
-                            `• Hazır məhsullar: 1-2 gün\\n` +
-                            `• Sifarişli məhsullar: 3-7 gün\\n\\n` +
-                            `📋 *Ödəniş:*\\n` +
-                            `• Nağd (çatdırılma zamanı)\\n` +
-                            `• Köçürmə (əvvəlcədən)\\n\\n` +
-                            `📞 Ətraflı məlumat üçün: !elaqe`;
-        
-        await this.sendMessage(chatId, deliveryText);
-    }
 
     async sendContactMessage(chatId) {
         const currentTime = config.getCurrentTime().format('HH:mm');
@@ -454,25 +382,7 @@ class WhatsAppBot {
         await this.sendMessage(chatId, contactText);
     }
 
-    async sendMainMenuMessage(chatId) {
-        const menuText = `🎒 *${config.businessName} - Əsas Menyu*\\n\\n` +
-                        `Aşağıdakı seçimlərdən birini edin:\\n\\n` +
-                        `🛒 *Kataloq* - Çanta kolleksiyamız\\n` +
-                        `💰 *Qiymətlər* - Qiymət siyahısı\\n` +
-                        `📝 *Sifariş* - Sifariş formu\\n` +
-                        `🚚 *Çatdırılma* - Çatdırılma məlumatı\\n` +
-                        `📞 *Əlaqə* - Əlaqə məlumatları\\n` +
-                        `ℹ️ *Məlumat* - Biznes haqqında\\n\\n` +
-                        `═══════════════════════\\n` +
-                        `📱 *Sürətli seçim:*\\n` +
-                        `1️⃣ Kataloq\\n` +
-                        `2️⃣ Qiymətlər\\n` +
-                        `3️⃣ Sifariş\\n` +
-                        `4️⃣ Əlaqə\\n\\n` +
-                        `Seçmək üçün nömrəsini və ya emoji-ni göndərin!`;
-        
-        await this.sendMessage(chatId, menuText);
-    }
+
 
     async handleNumberSelection(chatId, number) {
         switch (number) {
