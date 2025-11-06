@@ -111,12 +111,24 @@ class WhatsAppBot {
                 return; // Komanda işləndikdən sonra auto reply-a ehtiyac yox
             }
             
-            // Qrup mesajları üçün auto reply yoxla
-            if (chat.isGroup && !config.enableGroupChat) {
-                if (config.enableLogging) {
-                    console.log(`📵 Qrup mesajı (non-command) ignore edildi: ${chat.name || 'Group Chat'}`);
+            // Qrup mesajları - yalnız dostlar qrupu istisna, digərləri ignore
+            if (chat.isGroup) {
+                // Dostlar qrupu deyilsə, ignore et
+                if (message.from !== config.friendsGroupId) {
+                    if (config.enableLogging) {
+                        console.log(`� Qrup mesajı ignore edildi: ${chat.name || 'Group Chat'} (ID: ${message.from})`);
+                        console.log(`   Dostlar qrupu: ${config.friendsGroupId}`);
+                        console.log(`   Bu qrup: ${message.from}`);
+                    }
+                    return;
                 }
-                return;
+                // Dostlar qrupundaysa, yalnız komandaları qəbul et, auto reply yox
+                else if (!isCommand) {
+                    if (config.enableLogging) {
+                        console.log(`📝 Dostlar qrupunda non-command mesaj ignore edildi`);
+                    }
+                    return;
+                }
             }
             
             // İş statusunu yoxla
