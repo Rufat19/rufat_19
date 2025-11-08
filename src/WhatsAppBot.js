@@ -309,7 +309,7 @@ class WhatsAppBot {
         helpText += `• 1 - Şəxsi məlumatlar\n`;
         helpText += `• 2 - Əlaqə məlumatları\n`;
         helpText += `• 3 - İş layihələri\n`;
-        helpText += `• 4 - CV və Portfolio\n`;
+        helpText += `• 4 - CV və portfolio\n`;
         helpText += `• 5 - İş statusu\n\n`;
         
         helpText += `🔧 *Əsas komandalar:*\n`;
@@ -335,7 +335,7 @@ class WhatsAppBot {
                     `🏢 *ŞİRKƏT:* ${config.companyName}\n` +
                     `🏙️ *ŞƏHƏR:* ${config.city}\n` +
                     `⏰ *İNDİKİ VAXT:* ${currentTime}\n\n` +
-                    `📊 *STATUS:* ${status === 'working' ? '💼 İşdə' : status === 'lunch' ? '🍽️ Nahar fasiləsi' : '🌙 İş saatı bitib'}\n` +
+                    `📊 *STATUS:* ${status === 'working' ? '💼 İşdəyəm' : status === 'lunch' ? '🍽️ Nahar fasiləsi' : '🌙 İş saatı bitib'}\n` +
                     `🕐 *İş SAATLARI:* ${config.workStart}-${config.workEnd}\n` +
                     `📅 *İş GÜNLƏRİ:* Bazar ertəsi - Cümə\n\n` +
                     `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
@@ -525,8 +525,8 @@ class WhatsAppBot {
 
     async getWorkRelatedReply(messageBody) {
         const replies = [
-            '💼 İş saatlarındayam! İş məsələləri üçün:\n📱 @Sosial_Zone_Robot botuma bax\n🔍 Daxili IP: 4925\n⏰ Daha ətraflı: !work',
-            '💻 İş məsələsi üçün daha yaxşı olar:\n🤖 Telegram: @Sosial_Zone_Robot\n📞 IP 4925 ilə əlaqə\n💼 İş portfelim: !projects'
+            '💼 İş saatlarındayam! İş məsələləri üçün:\n📱🔍 Daxili IP: 4925\n⏰ Daha ətraflı: !work',
+            '💻 Özünü sosial və rəqəmsal sahədə inkişafın üçün, təklif edirəm:\n🤖 Telegram: t.me/@Sosial_Zone_Robot\n📞 IP 4925 ilə əlaqə\n💼 İş portfelim: !projects'
         ];
         return replies[Math.floor(Math.random() * replies.length)];
     }
@@ -577,25 +577,28 @@ class WhatsAppBot {
     
     isMoneyRequest(messageBody) {
         const moneyKeywords = [
-            'borc', 'borc ver', 'borcu var', 'pul', 'pul ver', 'pulu var', 
-            'kömək et', 'yardım et', 'ayın axırı', 'ayın sonu', 'gələn ay', 
-            'növbəti ay', 'manat', 'dollar', 'avro', 'kredit', 'ödəmə',
-            'ödəyə bilmir', 'ödə', 'qaytararam', 'geri verərəm', 'borcu',
-            'pulu yox', 'pulim yox', 'çətin durumda', 'maddi', 'malik çıx'
+            'borc', 'borc ver', 'borcu var', 'pul lazımdır', 'pul ver', 
+            'maddi kömək et', 'yardım et', 'ayın axırına kimi', 'ayın sonuna qədər', 'gələn ay qaytaracam', 
+            'növbəti ay qaytar', 'kredit bağlamalıyam', 'təcili pul lazımdır',
+            'ödəyə bilmir', 'qaytaracam', 'geri verərəm', 'borcu bağla',
+            'pulu yox', 'pulim yox', 'vəziyyət çətindir', 'vəziyyət biraz ağırdır', 'maddi çətinlik', 'Bu aralar biraz çətindir'
         ];
         return moneyKeywords.some(keyword => messageBody.includes(keyword));
     }
 
     async sendFriendlyResponse(chatId, messageBody) {
+        // Təbrik və bayram mesajları üçün ayrıca cavablar istifadə olunur
+        // Əgər celebration mesajıdırsa, burada heç bir cavab göndərilmir (çünki autoReplies-dən xüsusi cavab gedir)
+        if (this.isCelebrationMessage(messageBody)) {
+            return;
+        }
         const workStatus = config.getWorkStatus();
-        
         let responses = [];
-        
         if (workStatus === 'working') {
             responses = [
-                '💼 İş saatlarındayam. Sizə necə kömək edə bilərəm?',
-                '👨‍💻 Hal-hazırda layihələrlə məşğulam. Nə ilə əlaqədar yazırsınız?',
-                '💻 İş prosesindəyəm. Sizin məsələnizi dinləməyə hazıram.'
+                '💼 Bir qədər iş çoxdur, çatdıra bilmirəm, üzrlü sayın. Vaxt tapan kimi yazacam',
+                '👨‍💻 Hal-hazırda işlə bağlı zənglərlə məşğulam. Nə ilə əlaqədar yazırsınız?',
+                '💻 İş prosesindəyəm. Sizin zəhmət olmasa yazın, oxuyub cavab verərəm.'
             ];
         } else {
             responses = [
@@ -605,7 +608,6 @@ class WhatsAppBot {
                 '💬 Vaxt müsaitdir. Nə barədə danışmaq istəyirsiniz?'
             ];
         }
-        
         const randomResponse = responses[Math.floor(Math.random() * responses.length)];
         await this.sendMessage(chatId, randomResponse);
     }
