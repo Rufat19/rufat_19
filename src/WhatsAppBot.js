@@ -32,8 +32,8 @@ class WhatsAppBot {
     setupEventListeners() {
         // QR kod generasiyası
         this.client.on('qr', (qr) => {
-            console.log('� QR Kod event-i çağırıldı!');
-            console.log('�🔍 QR Kodu skan edin:');
+            console.log('📱 QR Kod event-i çağırıldı!');
+            console.log('🔍 QR Kodu skan edin:');
             qrcode.generate(qr, { small: true });
             console.log('\nWhatsApp tətbiqində QR kodu skan edin...');
             console.log(`🌐 QR kod uzunluğu: ${qr.length} karakter`);
@@ -116,7 +116,7 @@ class WhatsAppBot {
                 // Dostlar qrupu deyilsə, ignore et
                 if (message.from !== config.friendsGroupId) {
                     if (config.enableLogging) {
-                        console.log(`� Qrup mesajı ignore edildi: ${chat.name || 'Group Chat'} (ID: ${message.from})`);
+                        console.log(`🚫 Qrup mesajı ignore edildi: ${chat.name || 'Group Chat'} (ID: ${message.from})`);
                         console.log(`   Dostlar qrupu: ${config.friendsGroupId}`);
                         console.log(`   Bu qrup: ${message.from}`);
                     }
@@ -361,18 +361,18 @@ class WhatsAppBot {
                            `👨‍💻 *${config.ownerName}*\n` +
                            `💼 *${config.ownerPosition}*\n` +
                            `⏰ *İndiki vaxt:* ${currentTime}\n` +
-                           `� *Status:* ${status === 'working' ? '💼 İş saatı' : status === 'lunch' ? '🍽️ Nahar fasiləsi' : '🌙 İş saatı bitib'}\n\n` +
+                           `📊 *Status:* ${status === 'working' ? '💼 İş saatı' : status === 'lunch' ? '🍽️ Nahar fasiləsi' : '🌙 İş saatı bitib'}\n\n` +
                            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-                           `� *ƏLAQƏ*\n` +
+                           `📱 *ƏLAQƏ*\n` +
                            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
                            `📞 WhatsApp: ${config.ownerPhone}\n` +
                            `📧 Şəxsi: ${config.personalEmail}\n` +
-                           `� İş: ${config.workEmail}\n` +
+                           `💼 İş: ${config.workEmail}\n` +
                            `🕐 İş saatları: ${config.workStart}-${config.workEnd}\n\n` +
                            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
                            `🌐 *SOSİAL MEDIA*\n` +
                            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-                           `� Telegram: ${config.telegramProfile}\n` +
+                           `📱 Telegram: ${config.telegramProfile}\n` +
                            `📸 Instagram: ${config.instagramProfile}\n` +
                            `💼 LinkedIn: ${config.linkedinProfile}\n` +
                            `💻 GitHub: ${config.githubProfile}\n\n` +
@@ -473,8 +473,8 @@ class WhatsAppBot {
                             `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
                             `✅ 50+ uğurlu layihə\n` +
                             `🤖 20+ bot development\n` +
-                            `� 100% müştəri məmnuniyyəti\n\n` +
-                            `� Ətraflı: 2 → Əlaqə məlumatları`;
+                            `⭐ 100% müştəri məmnuniyyəti\n\n` +
+                            `💬 Ətraflı: 2 → Əlaqə məlumatları`;
         
         await this.sendMessage(chatId, projectsText);
     }
@@ -542,7 +542,7 @@ class WhatsAppBot {
             const professionalGreetings = [
                 '👋 Salam! İş saatları bitib, amma sizə yardım etməyə hazıram.\n💬 Hansı məlumat lazımdır?',
                 '😊 Salamlar! Hal-hazırda müsaitəm.\n📞 Sizə necə kömək edə bilərəm?',
-                '🌙 Salam! İşdən sonrakı vaxtımda da əlçatanəm.\n� Nəyə ehtiyacınız var?'
+                '🌙 Salam! İşdən sonrakı vaxtımda da əlçatanəm.\n💼 Nəyə ehtiyacınız var?'
             ];
             return professionalGreetings[Math.floor(Math.random() * professionalGreetings.length)];
         }
@@ -602,7 +602,7 @@ class WhatsAppBot {
                 '🌙 İş saatları bitib. Sizə necə kömək edə bilərəm?',
                 '⏰ Hal-hazırda müsaitəm. Hansı məlumatlar lazımdır?',
                 '📱 İşdən sonrakı vaxtımdayam. Sizin sorğunuz nədir?',
-                '� Vaxt müsaitdir. Nə barədə danışmaq istəyirsiniz?'
+                '💬 Vaxt müsaitdir. Nə barədə danışmaq istəyirsiniz?'
             ];
         }
         
