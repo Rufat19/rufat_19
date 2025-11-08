@@ -333,7 +333,7 @@ class WhatsAppBot {
                     `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
                     `💼 *VƏZİFƏ:* ${config.ownerPosition}\n` +
                     `🏢 *ŞİRKƏT:* ${config.companyName}\n` +
-                    `🏙️ *ŞƏHƏr:* ${config.city}\n` +
+                    `🏙️ *ŞƏHƏR:* ${config.city}\n` +
                     `⏰ *İNDİKİ VAXT:* ${currentTime}\n\n` +
                     `📊 *STATUS:* ${status === 'working' ? '💼 İşdə' : status === 'lunch' ? '🍽️ Nahar fasiləsi' : '🌙 İş saatı bitib'}\n` +
                     `🕐 *İş SAATLARI:* ${config.workStart}-${config.workEnd}\n` +
@@ -356,7 +356,7 @@ class WhatsAppBot {
         const currentTime = config.getCurrentTime().format('HH:mm');
         const status = config.getWorkStatus();
         
-        const contactText = `📞 *ƏLAQƏ MƏLUMAT LAri*\n\n` +
+        const contactText = `📞 *ƏLAQƏ MƏLUMATLARI*\n\n` +
                            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
                            `👨‍💻 *${config.ownerName}*\n` +
                            `💼 *${config.ownerPosition}*\n` +
@@ -438,15 +438,15 @@ class WhatsAppBot {
             nextWorkDay.add(1, 'day');
         }
         
-        const appointmentText = `🤝 *Görüşmək üçün*\\n\\n` +
-                               `📅 *Mövcud vaxtlar:*\\n` +
-                               `• ${config.workStart}-${config.lunchStart}\\n` +
-                               `• ${config.lunchEnd}-${config.workEnd}\\n\\n` +
-                               `📞 *Randevu üçün:*\\n` +
-                               `1️⃣ Telefon: ${config.ownerPhone}\\n` +
-                               `2️⃣ WhatsApp: Bu nömrə\\n` +
-                               `3️⃣ Mesaj: Təklif edin\\n\\n` +
-                               `⏰ *Növbəti iş günü:* ${nextWorkDay.format('DD.MM.YYYY')}\\n` +
+        const appointmentText = `🤝 *Görüşmək üçün*\n\n` +
+                               `📅 *Mövcud vaxtlar:*\n` +
+                               `• ${config.workStart}-${config.lunchStart}\n` +
+                               `• ${config.lunchEnd}-${config.workEnd}\n\n` +
+                               `📞 *Randevu üçün:*\n` +
+                               `1️⃣ Telefon: ${config.ownerPhone}\n` +
+                               `2️⃣ WhatsApp: Bu nömrə\n` +
+                               `3️⃣ Mesaj: Təklif edin\n\n` +
+                               `⏰ *Növbəti iş günü:* ${nextWorkDay.format('DD.MM.YYYY')}\n` +
                                `🕐 *Təklif olunan vaxt:* ${config.workStart}`;
         
         await this.sendMessage(chatId, appointmentText);
@@ -512,12 +512,12 @@ class WhatsAppBot {
 
     async sendTimeMessage(chatId) {
         const now = config.getCurrentTime();
-        const timeText = `🕐 *Vaxt Məlumatları*\\n\\n` +
-                        `⏰ *İndiki vaxt:* ${now.format('DD.MM.YYYY HH:mm:ss')}\\n` +
-                        `🌍 *Vaxt zonası:* ${config.timezone}\\n` +
-                        `📅 *Gün:* ${now.format('dddd')}\\n\\n` +
-                        `💼 *İş saatları:* ${config.workStart}-${config.workEnd}\\n` +
-                        `🥪 *Nahar:* ${config.lunchStart}-${config.lunchEnd}\\n\\n` +
+        const timeText = `🕐 *Vaxt Məlumatları*\n\n` +
+                        `⏰ *İndiki vaxt:* ${now.format('DD.MM.YYYY HH:mm:ss')}\n` +
+                        `🌍 *Vaxt zonası:* ${config.timezone}\n` +
+                        `📅 *Gün:* ${now.format('dddd')}\n\n` +
+                        `💼 *İş saatları:* ${config.workStart}-${config.workEnd}\n` +
+                        `🥪 *Nahar:* ${config.lunchStart}-${config.lunchEnd}\n\n` +
                         `📊 *Status:* ${config.getStatusMessage()}`;
         
         await this.sendMessage(chatId, timeText);

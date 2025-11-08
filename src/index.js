@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
     <!DOCTYPE html>
     <html>
     <head>
-        <title>🤖 Rüfət Babayev - Şəxsi Asistent</title>
+        <title>Rüfət Babayev - Şəxsi robot asistenti</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
@@ -82,7 +82,7 @@ app.get('/', (req, res) => {
     </head>
     <body>
         <div class="container">
-            <h1>🤖 Rüfət Babayev - Şəxsi Asistent</h1>
+            <h1>Rüfət Babayev - Şəxsi robot asistenti</h1>
             <div id="bot-status" class="status waiting">⏳ Status yoxlanılır...</div>
             
             ${currentQRCode ? `
