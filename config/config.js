@@ -41,17 +41,21 @@ const config = {
     // Avtomatik Mesaj Konfiqurasiyası
     enableAutoMessages: process.env.ENABLE_AUTO_MESSAGES !== 'false',
     enableCheckIns: process.env.ENABLE_CHECKINS !== 'false',
+    enableLunchReminder: process.env.ENABLE_LUNCH_REMINDER !== 'false',
+    manualIgnoreWindowMinutes: parseInt(process.env.MANUAL_IGNORE_WINDOW_MINUTES || '180', 10),
     
     // Email Addresses
     personalEmail: process.env.PERSONAL_EMAIL || 'babayev.rufat.official@gmail.com',
     workEmail: process.env.WORK_EMAIL || 'rufat.babayev@sosial.gov.az',
     
     // Social Media Links
-    telegramProfile: process.env.TELEGRAM_PROFILE || 'https://t.me/Rufat19',
+    telegramProfile: process.env.TELEGRAM_PROFILE || 'https://t.me/Babayev_Rufat_Rasul',
     facebookProfile: process.env.FACEBOOK_PROFILE || 'https://www.facebook.com/Rufat.Babayev91',
     instagramProfile: process.env.INSTAGRAM_PROFILE || 'https://www.instagram.com/19rbr19',
     linkedinProfile: process.env.LINKEDIN_PROFILE || 'https://www.linkedin.com/in/rufat-babayev19/',
     githubProfile: process.env.GITHUB_PROFILE || 'https://github.com/Rufat19',
+    // Resume (CV) fayl yolu
+    resumeFilePath: process.env.RESUME_FILE || 'assets/resume.pdf',
     
     // Business Info
     telegramBot: process.env.TELEGRAM_BOT || 'https://t.me/Sosial_Zone_Robot',
@@ -205,6 +209,26 @@ const config = {
 
     // Avtomatik Mesajlar Konfiqurasiyası
     autoMessages: {
+        // İş günlərində nahar xatırlatma və follow-up
+        lunchReminder: {
+            time: process.env.LUNCH_REMINDER_TIME || '11:15',
+            // Env format nümunələri:
+            //  - 994508888757,994512330328
+            //  - 994508888757:Rəna,994512330328:Aysel
+            recipients: (process.env.LUNCH_REMINDER_RECIPIENTS || '994508888757:Rəna,994512330328')
+                .split(',')
+                .map(v => v.trim())
+                .filter(Boolean)
+                .map(token => {
+                    const [phone, name] = token.split(':');
+                    return { phone: phone?.trim(), name: name?.trim() || undefined };
+                })
+        },
+        lunchFollowUp: {
+            time: process.env.LUNCH_FOLLOWUP_TIME || '12:30',
+            // Default olaraq yalnız ilk nömrəyə follow-up (Rəna)
+            recipientIndex: parseInt(process.env.LUNCH_FOLLOWUP_RECIPIENT_INDEX || '0', 10)
+        },
         // İşdən çıxarkən (18:00 civarı)
         eveningMessage: {
             time: '18:20', // İş bitkən 5 dəqiqə sonra
@@ -263,6 +287,24 @@ const config = {
         ];
         const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
         return selectedMessage + '\n\n☺️ _Bu mesaj bot tərəfindən göndərilib_\n📱 _İş vaxtı zaman ayıra bilmirəm, tezliklə geri dönüş edəcəm_';
+    },
+
+    // Nahar sifarişi xatırlatma mesajı (Rəna üçün)
+    getLunchOrderMessage(name) {
+        const greeting = name ? `${name} salam,` : 'Salam,';
+        const text =
+            `${greeting} Necəsən? Mümkündürsə mənə bugün üçün nahar götürmək yadında olsun, ` +
+            'əgər məndən məşğulluq səbəbi ilə növbəti öz yazdığım mesaj gəlməzsə bu lindkdən sifarişi edərsən zəhmət olmasa - ' +
+            'https://wolt.com/az/aze/baku/restaurant/green-bite-khatai/itemid-fa78235e9785303d4c04dfaf ' +
+            '- öncədən minnətdaram, alınmırsa problem deyil, özüm həll edəcəm, sənə isə nuş olsun';
+        return text + '\n\n🤖 _Bu mesaj bot tərəfindən göndərilib_';
+    },
+
+    // Nahar xatırlatma follow-up (linki DM göndərmə xatırlatması)
+    getLunchFollowUpMessage(name) {
+        const prefix = name ? `${name}, ` : '';
+        const text = `${prefix}Əgər sifariş verdinsə, zəhmət olmasa linki bura DM göndər 🙏`;
+        return text + '\n\n🤖 _Bu mesaj bot tərəfindən göndərilib_';
     },
 
     // Qrup mesaj funksiyaları

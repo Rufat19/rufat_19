@@ -11,7 +11,7 @@ Bu layihə **Rüfət Babayev**in şəxsi asistent botudur. İş saatları ərzin
 **İş Saatları:** 09:00-18:00 (Bakı vaxtı)  
 
 ### Sosial Media Əlaqələri
-- **Telegram:** https://t.me/Rufat19 (@Rufat19)
+- **Telegram:** https://t.me/Babayev_Rufat_Rasul (@Babayev_Rufat_Rasul)
 - **Facebook:** https://www.facebook.com/Rufat.Babayev91
 - **Instagram:** https://www.instagram.com/19rbr19
 - **LinkedIn:** https://www.linkedin.com/in/rufat-babayev19/

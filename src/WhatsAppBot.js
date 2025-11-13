@@ -1,6 +1,7 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const config = require('../config/config');
+const fse = require('fs-extra');
 
 class WhatsAppBot {
     constructor() {
@@ -25,6 +26,7 @@ class WhatsAppBot {
         
         this.isReady = false;
         this.autoMessageScheduler = null;
+        this.lastManualMessage = new Map(); // chatId -> ISO timestamp
         this.setupEventListeners();
         this.setupAutoMessages();
     }
@@ -82,8 +84,11 @@ class WhatsAppBot {
     
     async handleMessage(message) {
         try {
-            // Botun öz mesajlarını ignore et
-            if (message.fromMe) return;
+            // Öz (manual) mesajları qeyd et və avtomatik mesaj üçün istinad saxla
+            if (message.fromMe) {
+                await this.recordManualMessage(message);
+                return;
+            }
             
             // Status mesajlarını ignore et (spam qarşısı)
             if (message.from.includes('status@broadcast')) return;
@@ -144,7 +149,7 @@ class WhatsAppBot {
                 await this.handleAutoReply(message);
                 
                 // Şəxsi mesajları xüsusi idarə et
-                if (this.isPersonalMessage(messageBody) && workStatus === 'offline') {
+                if (workStatus === 'offline' && this.isPersonalMessage(messageBody) && !this.isCelebrationMessage(messageBody)) {
                     console.log('💬 Şəxsi mesaj - dostcasına cavab hazırlanır...');
                     setTimeout(async () => {
                         await this.sendFriendlyResponse(message.from, messageBody);
@@ -281,14 +286,6 @@ class WhatsAppBot {
                 console.log(`   🎯 Trigger tapıldı: "${trigger}" -> Reply göndərilir`);
                 let finalReply = await this.getContextualReply(trigger, reply, workStatus);
                 await this.sendMessage(message.from, finalReply);
-                
-                // Salamlaşma triggerindən sonra help menyusunu da göndər
-                if (trigger === 'salam' || trigger === 'hello') {
-                    console.log(`   📚 Salamlaşmadan sonra kömək menyusu göndərilir...`);
-                    setTimeout(async () => {
-                        await this.sendHelpMessage(message.from);
-                    }, 2000); // 2 saniyə gecikmə
-                }
                 return;
             }
         }
@@ -460,7 +457,9 @@ class WhatsAppBot {
                             `• Şəxsi Assistant Botları\n` +
                             `• Biznes Avtomatlaşdırma\n` +
                             `• Müştəri Xidməti Botları\n` +
-                            `• E-ticarət Botları\n\n` +
+                            `• E-ticarət Botları\n` +
+                            `• Sosial Zone Robot: https://t.me/Sosial_Zone_Robot\n` +
+                            `• Sosial Agent Bot: https://t.me/sosial_agent_bot\n\n` +
                             `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
                             `🌐 *WEB APPLICATIONS*\n` +
                             `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
@@ -480,6 +479,36 @@ class WhatsAppBot {
     }
 
     async sendResumeMessage(chatId) {
+        // Əvvəlcə PDF CV faylını göndərməyə cəhd et
+        try {
+            const candidates = [];
+            if (config.resumeFilePath) candidates.push(config.resumeFilePath);
+            candidates.push('assets/Rufat_Babayev_CV.pdf', 'assets/resume.pdf');
+
+            // assets içində olan hər hansı .pdf faylı da ehtiyat namizəd kimi əlavə et
+            try {
+                if (await fse.pathExists('assets')) {
+                    const files = await fse.readdir('assets');
+                    files.filter(f => /\.pdf$/i.test(f)).forEach(f => {
+                        const p = `assets/${f}`;
+                        if (!candidates.includes(p)) candidates.push(p);
+                    });
+                }
+            } catch {}
+
+            for (const p of candidates) {
+                try {
+                    if (await fse.pathExists(p)) {
+                        const media = MessageMedia.fromFilePath(p);
+                        await this.client.sendMessage(chatId, media, { caption: '📄 CV' });
+                        return;
+                    }
+                } catch {}
+            }
+        } catch (e) {
+            console.error('❌ CV faylı göndərilərkən xəta:', e);
+        }
+
         const resumeText = `📄 *CV VƏ PORTFOLIO*\n\n` +
                           `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
                           `👨‍💻 *${config.ownerName}*\n` +
@@ -547,22 +576,20 @@ class WhatsAppBot {
             return professionalGreetings[Math.floor(Math.random() * professionalGreetings.length)];
         }
         
-        // Təbriklər üçün vahid cavab
-        if (this.isCelebrationMessage(trigger)) {
-            return 'Təşəkkür edirəm, Allah canınızı sağ eləsin 🤲';
-        }
-        
         return reply;
     }
 
-    isCelebrationMessage(trigger) {
+    isCelebrationMessage(text) {
+        if (!text) return false;
+        const t = String(text).toLowerCase();
         const celebrationKeywords = [
-            'doğum günü', 'doğum gününüz', 'ad günü', 'ad gününüz', 
+            'doğum günü', 'doğum gününüz', 'ad günü', 'ad gününüz',
             'təbrik', 'təbrik edirəm', 'bayram', 'bayramınız mübarək',
-            'ramazan', 'qurban bayramı', 'ramazan bayramı', 'yeni il', 'yeni iliniz',
-            'evlilik', 'nişan', 'məzuniyyət', 'iş'
+            'ramazan', 'qurban bayramı', 'ramazan bayramı', 'novruz',
+            'yeni il', 'yeni iliniz', 'zəfər bayramı', 'dirçəliş günü',
+            'evlilik', 'nişan', 'məzuniyyət'
         ];
-        return celebrationKeywords.includes(trigger);
+        return celebrationKeywords.some(k => t.includes(k));
     }
 
     isPersonalMessage(messageBody) {
@@ -672,8 +699,16 @@ class WhatsAppBot {
         
         // Vaxt salamları variantları
         normalized = normalized.replace(/sabah[iy]n\s?xeyir/g, 'sabahın xeyir');
+        normalized = normalized.replace(/sabah(ın|iniz|niz)?\s?xey[iı]r[ea]?/g, 'sabahın xeyir');
         normalized = normalized.replace(/ax[sz]am[iy]n\s?xeyir/g, 'axşamın xeyir');
-        normalized = normalized.replace(/gecen\s?xeyir/g, 'gecən xeyir');
+        normalized = normalized.replace(/axsam(ın|iniz|niz)?\s?xey[iı]r[ea]?/g, 'axşamın xeyir');
+        normalized = normalized.replace(/axşam(ın|ınız|iniz|niz)?\s?xey[iı]r[ea]?/gi, 'axşamın xeyir');
+        normalized = normalized.replace(/axşamlar|axsamlar/gi, 'axşamın xeyir');
+        normalized = normalized.replace(/gecen\s?xeyir/gi, 'gecən xeyir');
+        normalized = normalized.replace(/gec[eə]n(iz)?\s?xey[iı]r[eəa]?/gi, 'gecən xeyir');
+        normalized = normalized.replace(/gece(niz)?\s?xey[iı]r[eəa]?/gi, 'gecən xeyir');
+        // Qısa forma: GX, G.X, G x → gecən xeyir
+        normalized = normalized.replace(/\bg\s*\.?\s*x\b/gi, 'gecən xeyir');
         
         // Bot variantları
         normalized = normalized.replace(/bott?/g, 'bot');
@@ -735,6 +770,62 @@ class WhatsAppBot {
         }
         
         try {
+            // İş günlərində 12:30-da Rəna üçün nahar xatırlatma
+            if (
+                config.enableLunchReminder &&
+                currentTime === config.autoMessages.lunchReminder.time &&
+                !config.weekendDays.includes(now.format('dddd'))
+            ) {
+                const msg = config.getLunchOrderMessage();
+                for (const num of config.autoMessages.lunchReminder.recipients) {
+                    const chatId = `${num}@c.us`;
+                    await this.sendMessage(chatId, msg);
+                }
+                console.log(`📤 Nahar xatırlatma mesajı göndərildi (${currentTime})`);
+            }
+
+            // İş günlərində 11:15-də nahar xatırlatma (manual mesaj varsa skip)
+            if (
+                config.enableLunchReminder &&
+                currentTime === config.autoMessages.lunchReminder.time &&
+                !config.weekendDays.includes(now.format('dddd'))
+            ) {
+                for (const rec of config.autoMessages.lunchReminder.recipients) {
+                    if (!rec?.phone) continue;
+                    const chatId = `${rec.phone}@c.us`;
+                    if (this.hasRecentManualMessage(chatId, config.manualIgnoreWindowMinutes)) {
+                        console.log(`⏭️ Manual mesaj aşkarlandı, nahar xatırlatma SKIP: ${chatId}`);
+                        continue;
+                    }
+                    const msg = config.getLunchOrderMessage(rec.name);
+                    await this.sendMessage(chatId, msg);
+                }
+                console.log(`📤 Nahar xatırlatma mesajı göndərildi (${currentTime})`);
+            }
+
+            // İş günlərində 12:30 follow-up: linki DM göndər xatırlatması (yalnız ilk adresata)
+            if (
+                config.enableLunchReminder &&
+                currentTime === config.autoMessages.lunchFollowUp.time &&
+                !config.weekendDays.includes(now.format('dddd'))
+            ) {
+                const idx = Math.max(0, Math.min(
+                    config.autoMessages.lunchFollowUp.recipientIndex,
+                    config.autoMessages.lunchReminder.recipients.length - 1
+                ));
+                const rec = config.autoMessages.lunchReminder.recipients[idx];
+                if (rec?.phone) {
+                    const chatId = `${rec.phone}@c.us`;
+                    if (!this.hasRecentManualMessage(chatId, config.manualIgnoreWindowMinutes)) {
+                        const msg2 = config.getLunchFollowUpMessage(rec.name);
+                        await this.sendMessage(chatId, msg2);
+                        console.log(`📤 Nahar follow-up mesajı göndərildi (${currentTime})`);
+                    } else {
+                        console.log(`⏭️ Manual mesaj aşkarlandı, follow-up SKIP: ${chatId}`);
+                    }
+                }
+            }
+
             // Cümə günü dostlarla görüş mesajı (18:15)
             if (now.format('dddd') === 'Friday' && currentTime === config.autoMessages.fridayMeeting.time) {
                 const message = config.getFridayMessage();
@@ -775,6 +866,40 @@ class WhatsAppBot {
             
         } catch (error) {
             console.error('❌ Avtomatik mesaj xətası:', error);
+        }
+    }
+
+    async recordManualMessage(message) {
+        try {
+            const chat = await message.getChat();
+            const chatId = chat?.id?._serialized || message.to || message.from;
+            const ts = config.getCurrentTime().toISOString();
+            if (chatId) {
+                this.lastManualMessage.set(chatId, ts);
+                console.log(`📝 Manual mesaj qeydə alındı: ${chatId} @ ${ts}`);
+            }
+        } catch (e) {
+            console.log('⚠️ Manual mesaj qeydi xətası:', e?.message || e);
+        }
+    }
+
+    hasRecentManualMessage(chatId, windowMinutes = 180) {
+        try {
+            const ts = this.lastManualMessage.get(chatId);
+            if (!ts) return false;
+            const now = config.getCurrentTime();
+            const last = config.getCurrentTime().clone().set({
+                year: Number(ts.slice(0,4)),
+                month: Number(ts.slice(5,7)) - 1,
+                date: Number(ts.slice(8,10)),
+                hour: Number(ts.slice(11,13)),
+                minute: Number(ts.slice(14,16)),
+                second: Number(ts.slice(17,19))
+            });
+            const diff = now.diff(last, 'minutes');
+            return diff >= 0 && diff <= windowMinutes;
+        } catch {
+            return false;
         }
     }
 

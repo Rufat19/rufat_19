@@ -16,6 +16,7 @@ services:
       - PERSONAL_EMAIL=babayev.rufat.official@gmail.com
       - WORK_EMAIL=rufat.babayev@sosial.gov.az
       - CITY=Bakı, Azərbaycan
+      - RESUME_FILE=assets/Rufat_Babayev_CV.pdf
       
       # İş Saatları (Bakı vaxtı)
       - WORK_START=09:00
@@ -24,7 +25,7 @@ services:
       - TZ=Asia/Baku
       
       # Sosial Media Profiles
-      - TELEGRAM_PROFILE=https://t.me/Rufat19
+      - TELEGRAM_PROFILE=https://t.me/Babayev_Rufat_Rasul
       - FACEBOOK_PROFILE=https://www.facebook.com/Rufat.Babayev91
       - INSTAGRAM_PROFILE=https://www.instagram.com/19rbr19
       - LINKEDIN_PROFILE=https://www.linkedin.com/in/rufat-babayev19/
