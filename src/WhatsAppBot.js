@@ -84,21 +84,25 @@ class WhatsAppBot {
     
     async handleMessage(message) {
         try {
-            // Öz (manual) mesajları qeyd et və avtomatik mesaj üçün istinad saxla
+            // Mesaj mətnini əvvəlcədən hazırla və komanda olub-olmadığını yoxla
+            const rawBody = (message.body || '').trim();
+            const lowered = rawBody.toLowerCase();
+            const isCommand = lowered.startsWith(config.commandPrefix);
+
+            // Öz (manual) mesajları qeyd et. Komanda deyilsə, burada dayandır
             if (message.fromMe) {
                 await this.recordManualMessage(message);
-                return;
+                if (!isCommand) return;
             }
             
             // Status mesajlarını ignore et (spam qarşısı)
             if (message.from.includes('status@broadcast')) return;
             
             // Boş mesajları ignore et
-            if (!message.body || message.body.trim() === '') return;
+            if (!rawBody) return;
             
             const chat = await message.getChat();
-            const messageBody = message.body.toLowerCase().trim();
-            const isCommand = messageBody.startsWith(config.commandPrefix);
+            const messageBody = lowered;
             
             // DEBUG məlumatları (yalnız vacib mesajlar üçün)
             if (config.enableLogging || isCommand) {
@@ -116,22 +120,18 @@ class WhatsAppBot {
                 return; // Komanda işləndikdən sonra auto reply-a ehtiyac yox
             }
             
-            // Qrup mesajları - yalnız dostlar qrupu istisna, digərləri ignore
+            // Qrup mesajları: yalnız dostlar və ailə qruplarında məhdudlaşdırılmış cavablar aktiv olsun
             if (chat.isGroup) {
-                // Dostlar qrupu deyilsə, ignore et
-                if (message.from !== config.friendsGroupId) {
+                const inFriends = config.isFriendsGroup(message.from);
+                const inFamily = config.isFamilyGroup(message.from);
+                if (!inFriends && !inFamily) {
                     if (config.enableLogging) {
                         console.log(`🚫 Qrup mesajı ignore edildi: ${chat.name || 'Group Chat'} (ID: ${message.from})`);
                         console.log(`   Dostlar qrupu: ${config.friendsGroupId}`);
+                        console.log(`   Ailə qrupu: ${config.familyGroupId}`);
                         console.log(`   Bu qrup: ${message.from}`);
                     }
-                    return;
-                }
-                // Dostlar qrupundaysa, yalnız komandaları qəbul et, auto reply yox
-                else if (!isCommand) {
-                    if (config.enableLogging) {
-                        console.log(`📝 Dostlar qrupunda non-command mesaj ignore edildi`);
-                    }
+                    // Komanda deyilsə, digər qruplara cavab verilmir
                     return;
                 }
             }
@@ -216,10 +216,23 @@ class WhatsAppBot {
             case 'keyboard':
                 await this.sendMainMenuMessage(message.from);
                 break;
+            
+            case 'hava':
+            case 'weather':
+                await this.sendWeatherMessage(message.from);
+                break;
                 
             case 'setgroup':
                 console.log('🎯 SetGroup komandası çağırıldı!');
-                await this.handleSetGroup(message);
+                await this.handleSetGroup(message, args[1]);
+                break;
+
+            case 'setfriends':
+                await this.handleSetGroup(message, 'friends');
+                break;
+
+            case 'setfamily':
+                await this.handleSetGroup(message, 'family');
                 break;
                 
             case 'groupinfo':
@@ -244,8 +257,9 @@ class WhatsAppBot {
         
         const workStatus = config.getWorkStatus();
         
-        // Borc istəyənlər üçün avtomatik cavab
-        if (this.isMoneyRequest(messageBody)) {
+        // Borc istəyənlər üçün avtomatik cavab (Ailə qrupunda tətbiq edilmir)
+        const isFamilyGroup = message.from === config.familyGroupId;
+        if (!isFamilyGroup && this.isMoneyRequest(messageBody)) {
             console.log('💰 Borc istəyi aşkarlandı - polite decline cavabı göndərilir');
             const excuseReplies = [
                 '😅 Üzr istəyirəm, hal-hazırda vəziyyətim çox çətindir.\n💼 Bu ay maddi durumum əlverişli deyil.',
@@ -283,6 +297,17 @@ class WhatsAppBot {
             const matches = messageBody.includes(trigger);
             console.log(`   - "${trigger}": ${matches ? '✅ MATCH' : '❌'}`);
             if (matches) {
+                // Ailə qrupunda yalnız salamlaşma/vaxt salamları və təbrik tipli cavabları göndər
+                if (message.from === config.familyGroupId) {
+                    const allowedInFamily = [
+                        'salam', 'hello', 'sabahın xeyir', 'axşamın xeyir', 'gecən xeyir',
+                        'doğum günün', 'ad günün', 'təbrik', 'bayram', 'ramazan bayramın', 'qurban bayramın', 'novruz bayramın', 'yeni ilin', 'zəfər bayramı', 'dirçəliş günü'
+                    ];
+                    if (!allowedInFamily.some(k => trigger.includes(k))) {
+                        console.log('   🚫 Family qrupunda uyğun olmayan trigger, reply SKIP');
+                        continue;
+                    }
+                }
                 console.log(`   🎯 Trigger tapıldı: "${trigger}" -> Reply göndərilir`);
                 let finalReply = await this.getContextualReply(trigger, reply, workStatus);
                 await this.sendMessage(message.from, finalReply);
@@ -311,7 +336,7 @@ class WhatsAppBot {
         
         helpText += `🔧 *Əsas komandalar:*\n`;
         helpText += `• !info, !contact, !projects\n`;
-        helpText += `• !resume, !status, !time\n\n`;
+        helpText += `• !resume, !status, !time, !hava\n\n`;
         
         if (workStatus === 'working') {
             helpText += `💼 İş saatı - Peşəkar rejim aktiv`;
@@ -552,6 +577,36 @@ class WhatsAppBot {
         await this.sendMessage(chatId, timeText);
     }
 
+    async sendWeatherMessage(chatId) {
+        try {
+            if (!config.enableWeatherTips) {
+                await this.sendMessage(chatId, '🌤️ Hava tövsiyələri deaktivdir. ENV: ENABLE_WEATHER_TIPS=true');
+                return;
+            }
+            if (!config.weather?.apiKey) {
+                await this.sendMessage(chatId, '🌤️ WEATHER_API_KEY təyin edilməyib. Xahiş olunur ENV-ə əlavə edəsiniz.');
+                return;
+            }
+            const lat = config.weather.lat;
+            const lon = config.weather.lon;
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=az&appid=${encodeURIComponent(config.weather.apiKey)}`;
+            const resp = await fetch(url);
+            if (!resp.ok) {
+                let bodySnippet = '';
+                try { bodySnippet = await resp.text(); bodySnippet = bodySnippet.slice(0,140); } catch {}
+                await this.sendMessage(chatId, `⚠️ Hava məlumatına çıxış alınmadı (status: ${resp.status}).`);
+                console.log('🌐 WEATHER DEBUG status=', resp.status, 'url=', url, 'bodySnippet=', bodySnippet);
+                return;
+            }
+            const data = await resp.json();
+            const text = config.buildWeatherTipMessage(data);
+            await this.sendMessage(chatId, text);
+        } catch (e) {
+            await this.sendMessage(chatId, '⚠️ Hava məlumatı alınarkən xəta baş verdi. Daha sonra yenidən cəhd edin.');
+            console.log('⚠️ sendWeatherMessage error:', e?.message || e);
+        }
+    }
+
     async getWorkRelatedReply(messageBody) {
         const replies = [
             '💼 İş saatlarındayam! İş məsələləri üçün:\n📱🔍 Daxili IP: 4925\n⏰ Daha ətraflı: !work',
@@ -561,21 +616,7 @@ class WhatsAppBot {
     }
 
     async getContextualReply(trigger, reply, workStatus) {
-        // İş saatlarında salam daha rəsmi
-        if (trigger === 'salam' && workStatus === 'working') {
-            return '👋 Salam! İş saatlarındayam, amma sizə kömək edə bilərəm.\n💼 İş məsələsi üçün: @Sosial_Zone_Robot\n💬 Digər sorğular üçün burada yazın';
-        }
-        
-        // İş saatları bitdikdə də professional
-        if ((trigger === 'salam' || trigger === 'hello') && workStatus === 'offline') {
-            const professionalGreetings = [
-                '👋 Salam! İş saatları bitib, amma sizə yardım etməyə hazıram.\n💬 Hansı məlumat lazımdır?',
-                '😊 Salamlar! Hal-hazırda müsaitəm.\n📞 Sizə necə kömək edə bilərəm?',
-                '🌙 Salam! İşdən sonrakı vaxtımda da əlçatanəm.\n💼 Nəyə ehtiyacınız var?'
-            ];
-            return professionalGreetings[Math.floor(Math.random() * professionalGreetings.length)];
-        }
-        
+        // Salam/hello üçün xüsusi “kömək” ifadəli cavabları ləğv edirik; birbaşa konfiqurasiya edilmiş reply göndərilir
         return reply;
     }
 
@@ -629,7 +670,6 @@ class WhatsAppBot {
             ];
         } else {
             responses = [
-                '🌙 İş saatları bitib. Sizə necə kömək edə bilərəm?',
                 '⏰ Hal-hazırda müsaitəm. Hansı məlumatlar lazımdır?',
                 '📱 İşdən sonrakı vaxtımdayam. Sizin sorğunuz nədir?',
                 '💬 Vaxt müsaitdir. Nə barədə danışmaq istəyirsiniz?'
@@ -863,6 +903,64 @@ class WhatsAppBot {
                 await this.sendMessage(config.friendsGroupId, meetingMessage);
                 console.log(`📤 Dostlar görüş mesajı göndərildi: ${currentTime} (Cümə günü)`);
             }
+
+            // Dostlar qrupu üçün gündəlik check-in-lər (konfiq üzrə saatlarda)
+            if (config.enableFriendsGroupCheckIns && config.friendsGroupId && Array.isArray(config.autoMessages.friendsGroupCheckIns)) {
+                for (const ci of config.autoMessages.friendsGroupCheckIns) {
+                    if (ci?.time === currentTime) {
+                        const msg = config.getFriendsGroupSmallTalk();
+                        await this.sendMessage(config.friendsGroupId, msg);
+                        console.log(`📤 Dostlar qrupu check-in mesajı göndərildi: ${currentTime}`);
+                    }
+                }
+            }
+            // Ailə qrupu üçün gündəlik check-in-lər
+            if (config.enableFamilyGroupCheckIns && config.familyGroupId && Array.isArray(config.autoMessages.familyGroupCheckIns)) {
+                for (const ci of config.autoMessages.familyGroupCheckIns) {
+                    if (ci?.time === currentTime) {
+                        const msg = config.getFamilyGroupSmallTalk();
+                        await this.sendMessage(config.familyGroupId, msg);
+                        console.log(`📤 Ailə qrupu check-in mesajı göndərildi: ${currentTime}`);
+                    }
+                }
+            }
+
+            // Hava proqnozu əsasında tövsiyələr (Bakı)
+            if (config.enableWeatherTips && Array.isArray(config.weather?.times) && config.weather.apiKey) {
+                if (config.weather.times.includes(currentTime)) {
+                    const lat = config.weather.lat;
+                    const lon = config.weather.lon;
+                    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=az&appid=${encodeURIComponent(config.weather.apiKey)}`;
+                    try {
+                        const resp = await fetch(url);
+                        if (resp.ok) {
+                            const data = await resp.json();
+                            const text = config.buildWeatherTipMessage(data);
+                            let targetId = null;
+                            const target = (config.weather.target || 'family').toLowerCase();
+                            if (target === 'family' && config.familyGroupId) targetId = config.familyGroupId;
+                            else if (target === 'friends' && config.friendsGroupId) targetId = config.friendsGroupId;
+                            else targetId = spouseId; // default həyat yoldaşı
+                            await this.sendMessage(targetId, text);
+                            console.log(`📤 Hava tövsiyəsi göndərildi (${currentTime}) → ${target}`);
+                        } else {
+                            console.log(`⚠️ Hava API cavabı uğursuz: ${resp.status}`);
+                        }
+                    } catch (e) {
+                        console.log('⚠️ Hava məlumatı alınmadı:', e?.message || e);
+                    }
+                }
+            }
+            // Ailə qrupu üçün gündəlik check-in-lər
+            if (config.enableFamilyGroupCheckIns && config.familyGroupId && Array.isArray(config.autoMessages.familyGroupCheckIns)) {
+                for (const ci of config.autoMessages.familyGroupCheckIns) {
+                    if (ci?.time === currentTime) {
+                        const msg = config.getFamilyGroupSmallTalk();
+                        await this.sendMessage(config.familyGroupId, msg);
+                        console.log(`📤 Ailə qrupu check-in mesajı göndərildi: ${currentTime}`);
+                    }
+                }
+            }
             
         } catch (error) {
             console.error('❌ Avtomatik mesaj xətası:', error);
@@ -917,10 +1015,14 @@ class WhatsAppBot {
             console.log('⚠️  Dostlar qrupu ID təyin edilməyib. Qrup mesajları deaktivdir.');
             console.log('💡 Qrup ID təyin etmək üçün qrupa "!setgroup" yazın');
         }
+        if (!config.familyGroupId) {
+            console.log('ℹ️  Ailə qrupu ID təyin edilməyib. Ailə qrupuna avtomatik mesaj yoxdur.');
+            console.log('💡 Ailə üçün: "!setgroup family" və ya "!setfamily"');
+        }
     }
 
     // Qrup ID təyin etmə funksiyaları
-    async handleSetGroup(message) {
+    async handleSetGroup(message, type) {
         console.log('🔧 handleSetGroup funksiyası başladı');
         const chat = await message.getChat();
         console.log(`📱 Chat info: isGroup=${chat.isGroup}, name=${chat.name}, id=${chat.id._serialized}`);
@@ -930,20 +1032,32 @@ class WhatsAppBot {
             await this.sendMessage(message.from, '❌ Bu komanda yalnız qruplarda işləyir!');
             return;
         }
-        
-        // Qrup ID-sini config-ə təyin et (bu sadə nümunədir, real proyektdə database istifadə edin)
-        config.friendsGroupId = chat.id._serialized;
-        config.friendsGroupName = chat.name;
-        
-        await this.sendMessage(chat.id._serialized, 
-            `✅ *Dostlar qrupu təyin edildi!*\n\n` +
-            `📱 Qrup: ${chat.name}\n` +
-            `🆔 ID: ${chat.id._serialized}\n\n` +
-            `🕘 Cümə günləri saat 19:00-da avtomatik salamlaşma mesajı göndəriləcək.\n\n` +
-            `🤖 _Bu qrup indi dostlar qrupu kimi tanınır_`
-        );
-        
-        console.log(`✅ Dostlar qrupu təyin edildi: ${chat.name} (${chat.id._serialized})`);
+        const target = (type || 'friends').toLowerCase();
+        if (target === 'family' || target === 'ailə' || target === 'aile') {
+            // Ailə qrupu
+            config.familyGroupId = chat.id._serialized;
+            config.familyGroupName = chat.name;
+            await this.sendMessage(chat.id._serialized,
+                `✅ *Ailə qrupu təyin edildi!*\n\n` +
+                `📱 Qrup: ${chat.name}\n` +
+                `🆔 ID: ${chat.id._serialized}\n\n` +
+                `💬 Bu qrupda yalnız salamlaşma, təbrik və hal-əhval tipli cavablar aktivdir.\n\n` +
+                `🤖 _Bu qrup indi ailə qrupu kimi tanınır_`
+            );
+            console.log(`✅ Ailə qrupu təyin edildi: ${chat.name} (${chat.id._serialized})`);
+        } else {
+            // Dostlar qrupu (default)
+            config.friendsGroupId = chat.id._serialized;
+            config.friendsGroupName = chat.name;
+            await this.sendMessage(chat.id._serialized, 
+                `✅ *Dostlar qrupu təyin edildi!*\n\n` +
+                `📱 Qrup: ${chat.name}\n` +
+                `🆔 ID: ${chat.id._serialized}\n\n` +
+                `🕘 Cümə günləri saat 19:00-da avtomatik salamlaşma mesajı göndəriləcək.\n\n` +
+                `🤖 _Bu qrup indi dostlar qrupu kimi tanınır_`
+            );
+            console.log(`✅ Dostlar qrupu təyin edildi: ${chat.name} (${chat.id._serialized})`);
+        }
     }
 
 
@@ -957,14 +1071,16 @@ class WhatsAppBot {
         }
         
         const isFriendsGroup = config.isFriendsGroup(chat.id._serialized);
+        const isFamilyGroup = config.isFamilyGroup(chat.id._serialized);
         
         await this.sendMessage(chat.id._serialized,
             `📊 *Qrup məlumatları:*\n\n` +
             `📛 Ad: ${chat.name}\n` +
             `🆔 ID: ${chat.id._serialized}\n` +
             `👥 Üzv sayı: ${chat.participants.length}\n` +
-            `🤖 Dostlar qrupu: ${isFriendsGroup ? '✅ Bəli' : '❌ Xeyr'}\n\n` +
-            `${isFriendsGroup ? '🕘 Cümə 19:00-da avtomatik mesaj gələcək' : '💡 !setgroup ilə dostlar qrupu olaraq təyin edə bilərsiniz'}`
+            `🤖 Dostlar qrupu: ${isFriendsGroup ? '✅ Bəli' : '❌ Xeyr'}\n` +
+            `👨‍👩‍👧‍👦 Ailə qrupu: ${isFamilyGroup ? '✅ Bəli' : '❌ Xeyr'}\n\n` +
+            `${isFriendsGroup ? '🕘 Cümə 19:00-da dostlar mesajları aktivdir' : isFamilyGroup ? '💬 Salamlaşma, təbrik və hal-əhval cavabları aktivdir' : '💡 !setgroup friends|family ilə qrup təyin edə bilərsiniz'}`
         );
     }
 

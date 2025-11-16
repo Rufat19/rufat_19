@@ -31,6 +31,8 @@ const config = {
     spouseName: process.env.SPOUSE_NAME || 'Nərgiz', // Həyat yoldaşının adı
     friendsGroupId: process.env.FRIENDS_GROUP_ID || '994553632066-1565592256@g.us', // Dostlar qrupunun ID-si
     friendsGroupName: process.env.FRIENDS_GROUP_NAME || 'Dostlar Qrupu', // Qrup adı
+    familyGroupId: process.env.FAMILY_GROUP_ID || '', // Ailə qrupunun ID-si (isteğe bağlı)
+    familyGroupName: process.env.FAMILY_GROUP_NAME || 'Ailə Qrupu',
     timezone: process.env.TIMEZONE || 'Asia/Baku',
     workStart: process.env.WORK_START || '09:00',
     workEnd: process.env.WORK_END || '18:00',
@@ -41,7 +43,23 @@ const config = {
     // Avtomatik Mesaj Konfiqurasiyası
     enableAutoMessages: process.env.ENABLE_AUTO_MESSAGES !== 'false',
     enableCheckIns: process.env.ENABLE_CHECKINS !== 'false',
-    enableLunchReminder: process.env.ENABLE_LUNCH_REMINDER !== 'false',
+    // Nahar xatırlatmaları hələlik deaktiv (env ilə ENABLE_LUNCH_REMINDER=true edərək aktivləşdirilə bilər)
+    enableLunchReminder: process.env.ENABLE_LUNCH_REMINDER === 'true',
+    // Dostlar qrupu üçün salamlama/hal-əhval check-inləri (default aktivdir)
+    enableFriendsGroupCheckIns: process.env.ENABLE_FRIENDS_GROUP_CHECKINS !== 'false',
+    enableFamilyGroupCheckIns: process.env.ENABLE_FAMILY_GROUP_CHECKINS !== 'false',
+    // Hava proqnozu əsasında tövsiyələr
+    enableWeatherTips: process.env.ENABLE_WEATHER_TIPS !== 'false',
+    weather: {
+        apiKey: process.env.WEATHER_API_KEY || '',
+        // Bakı koordinatları
+        lat: parseFloat(process.env.WEATHER_LAT || '40.4093'),
+        lon: parseFloat(process.env.WEATHER_LON || '49.8671'),
+        // Mesaj saatları (vergüllə ayrılmış)
+        times: (process.env.WEATHER_TIP_TIMES || '08:10').split(',').map(s => s.trim()).filter(Boolean),
+        // Hədəf: spouse | family | friends
+        target: (process.env.WEATHER_TIP_TARGET || 'family').toLowerCase()
+    },
     manualIgnoreWindowMinutes: parseInt(process.env.MANUAL_IGNORE_WINDOW_MINUTES || '180', 10),
     
     // Email Addresses
@@ -146,6 +164,10 @@ const config = {
         appointment: {
             description: 'Görüş təyin etmə',
             usage: '!randevu'
+        },
+        hava: {
+            description: 'Bakı üçün cari hava və tövsiyə',
+            usage: '!hava'
         }
     },
 
@@ -254,7 +276,18 @@ const config = {
             time: '12:30',
             day: 'Friday', // Hər Cümə günü
             message: 'Bugün görüşürük? 🤝'
-        }
+        },
+        // Dostlar qrupu üçün check-in vaxtları (gün ərzində qısa salam/hal-əhval)
+        friendsGroupCheckIns: [
+            { time: '10:30' },
+            { time: '14:30' },
+            { time: '21:00' }
+        ],
+        // Ailə qrupu üçün check-in saatları (sakit və hörmətli ton)
+        familyGroupCheckIns: [
+            { time: '10:00' },
+            { time: '16:00' }
+        ]
     },
 
     // Avtomatik mesaj funksiyaları
@@ -265,7 +298,16 @@ const config = {
             `${this.spouseName}, evə gəlirəm, nəsə lazımdır? 🏠`
         ];
         const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
-        return selectedMessage + '\n\n Bu mesaj bot tərəfindən göndərilib_';
+
+        // Sabah iş günüdürsə əlavə qeydi eyni mesaja daxil et
+        const now = this.getCurrentTime();
+        const nextDay = now.clone().add(1, 'day');
+        let appendNote = '';
+        if (!this.weekendDays.includes(nextDay.format('dddd'))) {
+            appendNote = `\n\n📌 Sabaha mənim üçün nahar fasiləsinə yemək qoymağı unutma.`;
+        }
+
+        return selectedMessage + appendNote + '\n\n☺️ _Bu mesaj bot tərəfindən göndərilib_';
     },
 
     getFridayMessage() {
@@ -319,18 +361,58 @@ const config = {
         const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
         return selectedMessage + '\n\n🤖 _Bu mesaj avtomatik göndərilib_';
     },
+    // Dostlar qrupu üçün qısa salam/hal-əhval  mesajları
+    getFriendsGroupSmallTalk() {
+        const options = [
+            '👋 Salam dostlar, gününüz necə keçir?',
+            '🙂 Necəsiniz? Yeni xəbər var?',
+            '☕ Qısa fasilə verək? Kim nə edir?',
+            '📅 Günün gedişi necədir, planlar nədir?',
+            '💬 Hal-əhval: hər şey qaydasındadır?'
+        ];
+        return options[Math.floor(Math.random() * options.length)] + '\n\n🤖 _Bu mesaj avtomatik göndərilib_';
+    },
 
-    // Dostlar görüş mesajı (zarafatla)
+    // Ailə qrupu üçün qısa salam/hal-əhval mesajları (daha neytral)
+    getFamilyGroupSmallTalk() {
+        const options = [
+            '👋 Salam, necəsiniz?',
+            '🙂 Gününüz xeyir, hər şey qaydasındadır?',
+            '☕ Günorta hal-əhval: hər kəs yaxşıdır?',
+            '📅 Gün necə keçir? Xoş xəbərlər var?',
+            '💬 Hamıya salamlar, sağlığınız necədir?'
+        ];
+        return options[Math.floor(Math.random() * options.length)] + '\n\n🤖 _Bu mesaj avtomatik göndərilib_';
+    },
+
+    // Dostlar görüş mesajı (mövsümə həssas, zarafatla)
     getFriendsMeetingMessage() {
-        const meetings = [
+        // Mövsüm təyini
+        const now = this.getCurrentTime();
+        const month = now.month(); // 0=Yanvar ... 11=Dekabr
+        const isWinter = [11, 0, 1].includes(month); // Dek, Yan, Fev
+        const isSpringOrSummer = month >= 2 && month <= 7; // Mar..Avg
+
+        const meetingsBase = [
             'Monopoliya oynayaq? 🎲',
             'Çayxanaya gedək dostlar? ☕',
-            'Pivə içməyə? 🍺',
             'Call of Duty oynayaq? 🎮',
             'Kart oynayaq? ♠️♥️',
             'Bilyarda kim var? ⚫⚪',
             'Bir nəfər də tapaq gedək Domino oynayaq? 🀫'
         ];
+
+        // Pivə təklifi yalnız yaz‑yay aylarında olsun
+        const meetings = [...meetingsBase];
+        if (isSpringOrSummer) {
+            meetings.push('Pivə içməyə? 🍺');
+        }
+
+        // Qış fəsli üçün Xəngəl və Hamam təklifləri əlavə et
+        if (isWinter) {
+            meetings.push('Xəngəl yeməyə gedək? 🥟');
+            meetings.push('Hamama gedək? 🛁');
+        }
         
         const jokes = [
             'Bəlkə bugün monopoliya oynayaq? 😄',
@@ -347,10 +429,60 @@ const config = {
         return `${selectedMeeting}\n\n${selectedJoke}\n\n🤖 _Bu mesaj bot tərəfindən göndərilib_`;
     },
 
+    // Hava tövsiyə mətni qurucu (OpenWeather `weather` endpoint nəticəsi üçün)
+    buildWeatherTipMessage(current) {
+        try {
+            if (!current || !current.weather || !current.weather[0] || !current.main) {
+                return '🌤️ Hava məlumatı hazırda əlçatan deyil.';
+            }
+            const desc = current.weather[0].description || '';
+            const main = current.weather[0].main || '';
+            const temp = Math.round(current.main.temp);
+            const feels = Math.round(current.main.feels_like || temp);
+            const wind = current.wind?.speed != null ? Math.round(current.wind.speed) : null; // m/s
+            const rainMm = current.rain?.['1h'] || current.rain?.['3h'] || 0;
+            const snowMm = current.snow?.['1h'] || current.snow?.['3h'] || 0;
+
+            const tips = [];
+            const lowered = (main + ' ' + desc).toLowerCase();
+            if (rainMm > 0 || lowered.includes('rain') || lowered.includes('yağış')) {
+                tips.push('çətir götürün ☔');
+            }
+            if (snowMm > 0 || lowered.includes('snow') || lowered.includes('qar')) {
+                tips.push('yollar sürüşkən ola bilər ❄️');
+            }
+            if (feels <= 5) {
+                tips.push('isti geyim məsləhətdir 🧥');
+            }
+            if (feels >= 30) {
+                tips.push('su için, günəşdən qorunun ☀️🥤');
+            }
+            if (wind != null && wind >= 8) {
+                tips.push('külək güclüdür, ehtiyatlı olun 🌬️');
+            }
+
+            const parts = [
+                `Bakı: ${temp}°C (hiss olunan ${feels}°C)`,
+                wind != null ? `külək ${wind} m/s` : null,
+                desc ? `hava: ${desc}` : null
+            ].filter(Boolean);
+
+            const base = `🌤️ ${parts.join(', ')}`;
+            const tipText = tips.length ? `Tövsiyə: ${tips.join(', ')}.` : 'Gün xoş keçsin!';
+            return `${base}\n${tipText}` + '\n\n🤖 _Bu mesaj avtomatik göndərilib_';
+        } catch {
+            return '🌤️ Hava məlumatı hazırda əlçatan deyil.';
+        }
+    },
+
     // Qrup ID-si yoxla
     isFriendsGroup(chatId) {
         if (!this.friendsGroupId) return false;
         return chatId.includes(this.friendsGroupId);
+    },
+    isFamilyGroup(chatId) {
+        if (!this.familyGroupId) return false;
+        return chatId.includes(this.familyGroupId);
     }
 };
 
